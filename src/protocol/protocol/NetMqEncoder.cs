@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using net_mq_util;
 using NetMQ;
+using Newtonsoft.Json;
 using protocol.db_methods;
 using protocol.Exceptions;
 using protocol.file_methods;
+using protocol.methods.slave_owner_methods;
 using protocol.server_methods;
 using protocol.slave_owner_methods;
 using static net_mq_util.NetMqUtil;
@@ -46,11 +48,41 @@ namespace net_mq_encoder
         #region encode methods for Slave owner servermodule
         public static NetMQMessage GenerateSlaveOwnerModuleMethodMessage(SlaveOwnerMethod method)
         {
-            //if (method is HelloWorldMethod _method)
-            //{
-            //    return GenerateHelloWorldMessage(_method);
-            //}
+            if (method is GetSlaveMethod)
+            {
+                return GenerateGetSlaveMessage((GetSlaveMethod)method);
+
+            }else if (method is GetListOfRunnableApplicationsMethod )
+            {
+                return GenerateGetListOfRunnableApplicationsMessage((GetListOfRunnableApplicationsMethod)method);
+            }
+
             throw new MethodFailedException();
+        }
+        protected static NetMQMessage GenerateGetSlaveMessage(GetSlaveMethod method)
+        {
+            var message = new NetMQMessage();
+            string json = String.Empty;
+
+            message.Append(GetFrame(GetSlaveMethod.METHOD_NAME));
+
+            json = ConvertToJson(method.ApplicationInfo);
+            message.Append(GetFrame(json));
+
+            json = ConvertToJson(method.SlaveBelongsTo);
+            message.Append(json);
+
+            return message;
+        }
+
+        protected static NetMQMessage GenerateGetListOfRunnableApplicationsMessage(GetListOfRunnableApplicationsMethod method)
+        {
+            var message = new NetMQMessage();
+            string json = String.Empty;
+
+            message.Append(GetFrame(GetListOfRunnableApplicationsMethod.METHOD_NAME));
+
+            return message;
         }
         #endregion
 
@@ -66,6 +98,9 @@ namespace net_mq_encoder
             //}
             throw new MethodFailedException();
         }
+
+
+
         #endregion
 
 
@@ -74,11 +109,10 @@ namespace net_mq_encoder
         #region encode methods for server module
         public static NetMQMessage GenerateServerModuleMethodMessage(ServerMethod method)
         {
-            if(method is HelloWorldMethod _method)
+            if (method is HelloWorldMethod _method)
             {
                 return GenerateHelloWorldMessage(_method);
             }
-
 
             throw new MethodFailedException();
         }
@@ -102,6 +136,10 @@ namespace net_mq_encoder
 
 
         #region private helper methods
+        private static string ConvertToJson(object obj)
+        {
+            return JsonConvert.SerializeObject(obj, Formatting.None);
+        }
 
         private static NetMQFrame GetFrame(byte[] data)
         {
@@ -122,7 +160,7 @@ namespace net_mq_encoder
         /// </summary>
         /// <param name="fileInfo"></param>
         /// <returns></returns>
-        private static Tuple<NetMQFrame,NetMQFrame> GetFrames(FileInfo fileInfo)
+        private static Tuple<NetMQFrame, NetMQFrame> GetFrames(FileInfo fileInfo)
         {
             if (fileInfo.Exists)
             {

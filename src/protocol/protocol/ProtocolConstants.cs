@@ -34,7 +34,22 @@ namespace net_mq_util
         //all methods ends with the method name
 
         //all methods defined for the protocol have a const string here
-        public static readonly string MET_SM_HelloWorld = "1HelloWorld";
+
+        //--------------methods for Server module--------------
+        public const string MET_SM_HelloWorld = "1HelloWorld";
+
+
+        //--------------methods for Slave Owner module--------------
+        public const string MET_SO_GET_SLAVE= "2GetSlave";
+        public const string MET_SO_GET_LIST_OF_RUNNABLE_APPLICATIONS= "3ListOfRunnableApplications";
+
+
+        //--------------methods for File Server module--------------
+
+        
+
+        //--------------methods for Database Server module--------------
+
 
 
 

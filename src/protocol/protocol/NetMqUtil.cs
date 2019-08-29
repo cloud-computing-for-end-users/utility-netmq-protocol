@@ -8,6 +8,14 @@ namespace net_mq_util
 {
     public class NetMqUtil
     {
+        private static readonly bool DEBUG_MODE = true;
+        public static void PrintWhenDebugging(string str)
+        {
+            if (DEBUG_MODE)
+            {
+                Console.WriteLine(str);
+            }
+        }
 
         //all methods that can be called in this protocol
 
@@ -20,7 +28,7 @@ namespace net_mq_util
         public enum TargetType
         {
             FileServermodule,
-            SlaveServermodule,
+            SlaveOwnerServermodule,
             DatabaseServermodule,
             ServerModule
         }
@@ -33,12 +41,31 @@ namespace net_mq_util
             //every mothod added here must be implemented in the NetMqEncoder and Decoder
             if (true)
             {
+                //--------------methods for Server module--------------
                 MethodToTargetType.Add(MET_SM_HelloWorld, TargetType.ServerModule);
+
+
+                //--------------methods for Slave Owner module--------------
+                MethodToTargetType.Add(MET_SO_GET_SLAVE, TargetType.SlaveOwnerServermodule);
+                MethodToTargetType.Add(MET_SO_GET_LIST_OF_RUNNABLE_APPLICATIONS, TargetType.SlaveOwnerServermodule);
+
+
+                //--------------methods for File Server module--------------
+
+
+
+                //--------------methods for Database Server module--------------
+
+
+
+
+
+
 
             }
         }
 
-       
+
         public static Dictionary<string, TargetType> GetMethodToTargetTypeClone()
         {
             return new Dictionary<string, TargetType>(MethodToTargetType);

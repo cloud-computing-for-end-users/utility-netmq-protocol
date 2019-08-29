@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using net_mq_util;
 using NetMQ;
+using Newtonsoft.Json;
 using protocol.db_methods;
 using protocol.Exceptions;
 using protocol.file_methods;
+using protocol.model;
 using protocol.server_methods;
 using protocol.slave_owner_methods;
 using static net_mq_util.NetMqUtil;
-using static net_mq_util.ProtocolConstants;
-
+using protocol.methods.slave_owner_methods;
 namespace net_mq_decoder
 {
     public class NetMqDecoder
@@ -31,8 +31,11 @@ namespace net_mq_decoder
         /// <returns></returns>
         public static NetMqUtil.TargetType GetTargetType(NetMQMessage message)
         {
-            var frame = GetFirstFrame(message);
-
+            if (0 != message.FrameCount)
+            {
+                throw new MethodFailedException();
+            }
+            NetMQFrame frame = message.First;
             string frameContent = frame.ConvertToString();
 
             if (STRING_TO_TARGET_TYPE.ContainsKey(frameContent))
@@ -45,31 +48,16 @@ namespace net_mq_decoder
             }
         }
 
-        protected static NetMQFrame GetFirstFrame(NetMQMessage message)
-        {
-            if(0 < message.FrameCount)
-            {
-                return message.First;
-            }
-            else
-            {
-                throw new MethodFailedException();
-            }
-
-
-        }
-
-
         #region decode methods for File servermodule
         public static FileMethod DecodeFileModuleMethod(NetMQMessage message)
         {
-            var firstFrame = GetFirstFrame(message);
+            var firstFrame = message.Pop(); // this strips the method name fram off the message object
             var methodName = GetFromFrameString(firstFrame);
 
             //validate the target type
-            if(false == IsTargetTypeCorrect(methodName, TargetType.FileServermodule))
+            if (false == IsTargetTypeCorrect(methodName, TargetType.FileServermodule))
             {
-                throw new WrongTargetException(); 
+                throw new WrongTargetException();
             }
 
             //if (HelloWorldMethod.METHOD_NAME.Equals(methodName))
@@ -85,29 +73,58 @@ namespace net_mq_decoder
         #region decode methods for Slave owner servermodule
         public static SlaveOwnerMethod DecodeSlaveOwnerModuleMethod(NetMQMessage message)
         {
-            var firstFrame = GetFirstFrame(message);
+            var firstFrame = message.Pop(); // this strips the method name fram off the message object
             var methodName = GetFromFrameString(firstFrame);
 
             //validate the target type
-            if (false == IsTargetTypeCorrect(methodName, TargetType.SlaveServermodule))
+            if (false == IsTargetTypeCorrect(methodName, TargetType.SlaveOwnerServermodule))
             {
                 throw new WrongTargetException();
             }
 
-            //if (HelloWorldMethod.METHOD_NAME.Equals(methodName))
-            //{
-            //    return DecodeServerMethodHelloWorld(message);
-            //}
+            if (GetSlaveMethod.METHOD_NAME.Equals(methodName))
+            {
+                return DecodeGetSlaveMessage(message);
+            }
+            else if (GetListOfRunnableApplicationsMethod.METHOD_NAME.Equals(methodName))
+            {
+                return DecodeGetListOfRunnableApplicationsMessage(message);
+            }
 
 
             throw new MethodFailedException();
+        }
+
+        protected static GetSlaveMethod DecodeGetSlaveMessage(NetMQMessage message)
+        {
+            var result = new GetSlaveMethod();
+            string str = String.Empty;
+
+            str = message.Pop().ConvertToString();
+            var obj1 = ConvertToObjectFromJsonString<ApplicationInfo>(str);
+
+            str = message.Pop().ConvertToString();
+            var obj2 = ConvertToObjectFromJsonString<PrimaryKey>(str);
+
+            result.ApplicationInfo = obj1;
+            result.SlaveBelongsTo = obj2;
+
+            return result;
+        }
+
+        protected static GetListOfRunnableApplicationsMethod DecodeGetListOfRunnableApplicationsMessage(NetMQMessage message)
+        {
+            var result = new GetListOfRunnableApplicationsMethod();
+            string str = String.Empty;
+
+            return result;
         }
         #endregion
 
         #region decode methods for database servermodule
         public static DatabaseMethod DecodeDatabaseModuleMethod(NetMQMessage message)
         {
-            var firstFrame = GetFirstFrame(message);
+            var firstFrame = message.Pop();
             var methodName = GetFromFrameString(firstFrame);
 
             //validate the target type
@@ -158,7 +175,7 @@ namespace net_mq_decoder
 
         protected static HelloWorldMethod DecodeServerMethodHelloWorld(NetMQMessage message)
         {
-            if(1 != message.FrameCount)
+            if (1 != message.FrameCount)
             {
                 throw new MethodFailedException("Not the right amount of frames");
             }
@@ -175,6 +192,19 @@ namespace net_mq_decoder
 
 
         #region private helper methods
+        private static T ConvertToObjectFromJsonString<T>(string jsonString)
+        {
+            PrintWhenDebugging("ConvertToObjectFromJsonString - param: " + jsonString);
+            var obj = JsonConvert.DeserializeObject(jsonString, typeof(T));
+            if (obj is T _obj)
+            {
+                return _obj;
+            }
+            else
+            {
+                throw new MethodFailedException();
+            }
+        }
 
         private static bool IsTargetTypeCorrect(string methodName, TargetType expected)
         {
