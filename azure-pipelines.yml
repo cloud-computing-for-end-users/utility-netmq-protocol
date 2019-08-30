@@ -44,7 +44,10 @@ steps:
     nugetConfigPath: './NuGet.Config'
     packagesToPack: '**/protocol.csproj'
     nobuild: true
-    versioningScheme: 'byBuildNumber'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0'
 
 - task: DotNetCoreCLI@2
   displayName: .NET Core NuGet Push
