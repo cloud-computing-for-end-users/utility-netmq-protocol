@@ -21,8 +21,10 @@ steps:
     version: '2.2.401'
 
 - task: DotNetCoreCLI@2
+  displayName: .NET Core Restore
   inputs:
     command: 'restore'
+    projects: '$(solution)'
     feedsToUse: 'config'
     nugetConfigPath: './NuGet.Config'
 
