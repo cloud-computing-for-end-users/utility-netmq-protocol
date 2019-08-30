@@ -35,3 +35,20 @@ steps:
     command: build
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration) --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: .NET Core NuGet Pack
+  inputs:
+    command: 'pack'
+    feedsToUse: 'config'
+    nugetConfigPath: './NuGet.Config'
+    packagesToPack: '**/protocol.csproj'
+    versioningScheme: 'off'
+
+- task: DotNetCoreCLI@2
+  displayName: .NET Core NuGet Push
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '1f2eafee-a091-46b5-83a5-d2d8542cb765'
