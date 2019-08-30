@@ -48,7 +48,6 @@ steps:
     majorVersion: '1'
     minorVersion: '0'
     patchVersion: '0'
-    buildProperties: '$id$=Utility.NetMQ.Protocol;$authors$=CCFEU;$owners$=CCFEU;$description$=Utility NetMQ Protocol;'
 
 - task: DotNetCoreCLI@2
   displayName: .NET Core NuGet Push
