@@ -43,7 +43,9 @@ steps:
     feedsToUse: 'config'
     nugetConfigPath: './NuGet.Config'
     packagesToPack: '**/protocol.csproj'
+    nobuild: true
     versioningScheme: 'off'
+    buildProperties: '/p:NuspecFile=~/src/protocol/Utility.NetMQ.Protocol.nuspec'
 
 - task: DotNetCoreCLI@2
   displayName: .NET Core NuGet Push
