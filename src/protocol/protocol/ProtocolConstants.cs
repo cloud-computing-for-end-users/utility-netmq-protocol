@@ -12,6 +12,8 @@ namespace net_mq_util
 
 
 
+        //-----------NOTICE--------
+        // these steps are no longer fully up to date
 
         //----------steps to fully add a method call to the protocol----------
         //1. add a static readonly string below
@@ -23,7 +25,8 @@ namespace net_mq_util
         //6. as in 4. but for the decoder "NetMqDecoder"
         //7. as in 5 but for the decoder.
 
-
+        public const string RESPONDE_NULL = "7NULL";
+        public const int SERVERMODULE_ID_NOT_YET_ASSIGNED = -564864; // arbitrary negative value
 
         //----------------------NAMING CONVENTION----------------------
         //all methods starts with MET_
@@ -37,6 +40,7 @@ namespace net_mq_util
 
         //--------------methods for Server module--------------
         public const string MET_SM_HelloWorld = "1HelloWorld";
+        public const string MET_SM_REG_SM = "6RegisterServermodule";
 
 
         //--------------methods for Slave Owner module--------------

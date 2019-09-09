@@ -1,6 +1,7 @@
 using net_mq_decoder;
 using net_mq_encoder;
 using NUnit.Framework;
+using protocol.methods.server_methods;
 using protocol.methods.slave_owner_methods;
 using protocol.server_methods;
 using protocol.slave_owner_methods;
@@ -85,11 +86,77 @@ namespace Tests
             var encodedMethod = NetMqEncoder.GenerateSlaveOwnerModuleMethodMessage(methodToCall);
             var decodedMethod = NetMqDecoder.DecodeSlaveOwnerModuleMethod(encodedMethod);
 
-            if (decodedMethod is GetSlaveMethod _method)
+            if (decodedMethod is GetListOfRunnableApplicationsMethod _method)
             {
                 Assert.Pass();
             }
             Assert.Fail();
+        }
+        /// <summary>
+        /// testing RegisterSlaveOwnerServermoduleMethod
+        /// </summary>
+        [Test]
+        public void Test4()
+        {
+            var methodToCall = new RegisterSlaveOwnerServermoduleMethod()
+            {
+            };
+
+            var encodedMethod = NetMqEncoder.GenerateServerModuleMethodMessage(methodToCall);
+            var decodedMethod = NetMqDecoder.DecodeServerModuleMethod(encodedMethod);
+
+            if (decodedMethod is RegisterSlaveOwnerServermoduleMethod _method)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+        /// <summary>
+        /// testing RegisterFileServermoduleMethod
+        /// </summary>
+        [Test]
+        public void Test5()
+        {
+            var methodToCall = new RegisterFileServermoduleMethod()
+            {
+            };
+
+            var encodedMethod = NetMqEncoder.GenerateServerModuleMethodMessage(methodToCall);
+            var decodedMethod = NetMqDecoder.DecodeServerModuleMethod(encodedMethod);
+
+            if (decodedMethod is RegisterFileServermoduleMethod _method)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
+        }
+        /// <summary>
+        /// testing RegisterDatabaseServermoduleMethod
+        /// </summary>
+        [Test]
+        public void Test6()
+        {
+            var methodToCall = new RegisterDatabaseServermoduleMethod()
+            {
+            };
+
+            var encodedMethod = NetMqEncoder.GenerateServerModuleMethodMessage(methodToCall);
+            var decodedMethod = NetMqDecoder.DecodeServerModuleMethod(encodedMethod);
+
+            if (decodedMethod is RegisterDatabaseServermoduleMethod _method)
+            {
+                Assert.Pass();
+            }
+            else
+            {
+                Assert.Fail();
+            }
         }
 
     }

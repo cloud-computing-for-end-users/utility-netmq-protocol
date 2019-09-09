@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetMQ;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static net_mq_util.ProtocolConstants;
@@ -8,6 +9,12 @@ namespace net_mq_util
 {
     public class NetMqUtil
     {
+        //public constants for accessible to all in the system
+        public const int SERVER_MODULE_PORT = 9825;
+        public const string SERVER_MODULE_IP = "127.0.0.1";
+
+
+
         private static readonly bool DEBUG_MODE = true;
         public static void PrintWhenDebugging(string str)
         {
@@ -43,6 +50,9 @@ namespace net_mq_util
             {
                 //--------------methods for Server module--------------
                 MethodToTargetType.Add(MET_SM_HelloWorld, TargetType.ServerModule);
+                MethodToTargetType.Add(MET_SM_REG_DB_SM, TargetType.ServerModule);
+                MethodToTargetType.Add(MET_SM_REG_FILE_SM, TargetType.ServerModule);
+                MethodToTargetType.Add(MET_SM_REG_SO_SM, TargetType.ServerModule);
 
 
                 //--------------methods for Slave Owner module--------------
@@ -65,7 +75,21 @@ namespace net_mq_util
             }
         }
 
+        public static NetMQMessage CloneShallowNetMqMessage(NetMQMessage message)
+        {
+            List<NetMQFrame> messageFrames = new List<NetMQFrame>(); //deconstructing message to access the frame with the target type
+            while (false == message.IsEmpty)
+            {
+                messageFrames.Add(message.Pop());
+            }
 
+            foreach(var frame in messageFrames)
+            {
+                message.Append(frame);
+            }
+
+            return new NetMQMessage(messageFrames);
+        }
         public static Dictionary<string, TargetType> GetMethodToTargetTypeClone()
         {
             return new Dictionary<string, TargetType>(MethodToTargetType);

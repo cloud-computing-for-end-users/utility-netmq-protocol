@@ -6,7 +6,13 @@ namespace protocol.model
 {
     public class Success
     {
+        public static Success Yes { get { return new Success { Succeded = true }; } }
+        public static Success No { get { return new Success { Succeded = false }; } }
+
+
         public bool Succeded { get; set; }
+
+
 
         public override bool Equals(object obj)
         {
@@ -19,5 +25,7 @@ namespace protocol.model
             }
             return false;
         }
+
+        
     }
 }

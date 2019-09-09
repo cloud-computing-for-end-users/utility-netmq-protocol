@@ -1,9 +1,10 @@
-﻿using System;
+﻿using protocol.server_methods;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using static net_mq_util.ProtocolConstants;
 
-namespace protocol.server_methods
+namespace protocol.methods.server_methods
 {
     public class HelloWorldMethod : ServerMethod
     {
@@ -11,6 +12,10 @@ namespace protocol.server_methods
 
         public string param1 { get; set; }
 
+        public HelloWorldMethod()
+        {
+
+        }
         public HelloWorldMethod(string param1)
         {
             this.param1 = param1;

@@ -11,6 +11,8 @@ using protocol.server_methods;
 using protocol.slave_owner_methods;
 using static net_mq_util.NetMqUtil;
 using protocol.methods.slave_owner_methods;
+using protocol.methods.server_methods;
+
 namespace net_mq_decoder
 {
     public class NetMqDecoder
@@ -23,29 +25,45 @@ namespace net_mq_decoder
         }
 
 
-        #region decoder methods
-        /// <summary>
-        /// the frame passed to this method must be the first frame of a message
-        /// </summary>
-        /// <param name="frame"></param>
-        /// <returns></returns>
+        //#region decoder methods
+        ///// <summary>
+        ///// the frame passed to this method must be the first frame of a message
+        ///// </summary>
+        ///// <param name="frame"></param>
+        ///// <returns></returns>
+        //public static NetMqUtil.TargetType GetTargetType(NetMQMessage message)
+        //{
+        //    if (0 != message.FrameCount)
+        //    {
+        //        throw new MethodFailedException();
+        //    }
+        //    NetMQFrame frame = message.First;
+        //    string frameContent = frame.ConvertToString();
+
+        //    if (STRING_TO_TARGET_TYPE.ContainsKey(frameContent))
+        //    {
+        //        return STRING_TO_TARGET_TYPE[frameContent];
+        //    }
+        //    else
+        //    {
+        //        throw new MethodFailedException();
+        //    }
+        //}
         public static NetMqUtil.TargetType GetTargetType(NetMQMessage message)
         {
-            if (0 != message.FrameCount)
-            {
-                throw new MethodFailedException();
-            }
-            NetMQFrame frame = message.First;
-            string frameContent = frame.ConvertToString();
 
-            if (STRING_TO_TARGET_TYPE.ContainsKey(frameContent))
+            string frameString;
+            while (false == message.IsEmpty)
             {
-                return STRING_TO_TARGET_TYPE[frameContent];
+                frameString = message.Pop().ConvertToString();
+
+                if (STRING_TO_TARGET_TYPE.ContainsKey(frameString))
+                {
+                    return STRING_TO_TARGET_TYPE[frameString];
+                }
             }
-            else
-            {
-                throw new MethodFailedException();
-            }
+
+            throw new MethodFailedException();
         }
 
         #region decode methods for File servermodule
@@ -144,11 +162,17 @@ namespace net_mq_decoder
         #endregion
 
         #region decode methods for server module
-        public static ServerMethod DecodeServerModuleMethod(NetMQMessage message)
+        public static Tuple<ServerMethod,Tuple<ServermoduleID,CallID>> DecodeServerModuleMethod(NetMQMessage message)
         {
 
-            var firstFrame = message.Pop();
-            var methodName = GetFromFrameString(firstFrame);
+            var splitMessage = SplitMessageInContentAndMetaData(message);
+            var methodName = splitMessage.Item1.Pop().ConvertToString();
+
+            //var firstFrame = message.Pop();
+            //var methodName = GetFromFrameString(firstFrame);
+
+            //var secondFrame = message.Pop();
+            //var methodId = GetFromFrameString(secondFrame);
 
             //validate the target type
             if (false == IsTargetTypeCorrect(methodName, TargetType.ServerModule))
@@ -156,37 +180,115 @@ namespace net_mq_decoder
                 throw new WrongTargetException();
             }
 
+            ServerMethod result = null;
             //the first frame have already been "Pop'ed" off and the message will therefore have one frame less than you would normally expect
             if (HelloWorldMethod.METHOD_NAME.Equals(methodName))
             {
-                return DecodeServerMethodHelloWorld(message);
+                result = DecodeServerMethodHelloWorld(message);
             }
-            else
+            else if (RegisterSlaveOwnerServermoduleMethod.METHOD_NAME.Equals(methodName))
             {
-
+                result =  DecodeServerMethodRegisterSlaveOwnerServermodule(message);
             }
+            //else if (RegisterFileServermoduleMethod.METHOD_NAME.Equals(methodName))
+            //{
+            //    result = DecodeServerMethodRegisterFileServermodule(message);
+            //}
+            //else if (RegisterDatabaseServermoduleMethod.METHOD_NAME.Equals(methodName))
+            //{
+            //    result = DecodeServerMethodRegisterDatabaseServermodule(message);
+            //}
 
-
-
-
-
-            throw new MethodFailedException();
+            return new Tuple<ServerMethod, Tuple<ServermoduleID, CallID>>(result, new Tuple<ServermoduleID, CallID>(splitMessage.Item2.Item1, splitMessage.Item2.Item2));
         }
 
         protected static HelloWorldMethod DecodeServerMethodHelloWorld(NetMQMessage message)
         {
+            var result = new HelloWorldMethod();
+            //result.MethodId = methoId;
+
             if (1 != message.FrameCount)
             {
                 throw new MethodFailedException("Not the right amount of frames");
             }
 
-            var secondFrame = message.Pop();
-            return new HelloWorldMethod(GetFromFrameString(secondFrame));
+            var thirdFrame = message.Pop();
+            result.param1 = (GetFromFrameString(thirdFrame));
+
+            return result;
         }
+        protected static RegisterSlaveOwnerServermoduleMethod DecodeServerMethodRegisterSlaveOwnerServermodule(NetMQMessage message)
+        {
+            var result = new RegisterSlaveOwnerServermoduleMethod();
+            //result.MethodId = methoId;
+
+            if (1 != message.FrameCount)
+            {
+                throw new MethodFailedException("Not the right amount of frames");
+            }
+
+            var str = message.Pop().ConvertToString();
+            result.ConnectionInfo = ConvertToObjectFromJsonString<ConnectionInfo>(str);
+
+            return result;
+        }
+        protected static RegisterFileServermoduleMethod DecodeServerMethodRegisterFileServermodule(NetMQMessage message)
+        {
+            var result = new RegisterFileServermoduleMethod();
+            //result.MethodId = methodId;
+
+            if (1 != message.FrameCount)
+            {
+                throw new MethodFailedException("Not the right amount of frames");
+            }
+
+            var str = message.Pop().ConvertToString();
+            result.ConnectionInfo = ConvertToObjectFromJsonString<ConnectionInfo>(str);
+
+            return result;
+
+        }
+        protected static RegisterServermoduleMethod DecodeServerMethodRegisterDatabaseServermodule(NetMQMessage message)
+        {
+            var result = new RegisterServermoduleMethod();
+            //result.MethodId = methodId;
+
+            if (1 != message.FrameCount)
+            {
+                throw new MethodFailedException("Not the right amount of frames");
+            }
+
+            var str = message.Pop().ConvertToString();
+            result.ConnectionInfo = ConvertToObjectFromJsonString<ConnectionInfo>(str);
+
+            return result;
+        }
+
+
+
         #endregion
 
 
+        #region decode methods for responces
+        public static Tuple<T, Tuple<ServermoduleID, CallID>> DecodeResponse<T>(NetMQMessage message)
+        {
+
+            var servermoduleID = new ServermoduleID()
+            {
+                ID= Convert.ToInt32(message.Pop().ConvertToString())
+            };
+            var callID = new CallID()
+            {
+                ID = Convert.ToInt32(message.Pop().ConvertToString())
+            };
+
+            var jsonObject = message.Pop().ConvertToString();
+            var responseObject = ConvertToObjectFromJsonString<T>(jsonObject);
+            return new Tuple<T, Tuple<ServermoduleID, CallID>>(responseObject,new Tuple<ServermoduleID, CallID>(servermoduleID,callID));
+        }
+
         #endregion
+
 
 
 
@@ -223,7 +325,8 @@ namespace net_mq_decoder
         }
         private static int GetFromFrameInt(NetMQFrame frame)
         {
-            return frame.ConvertToInt32();
+            throw new Exception("This is a trap, as integers can't be sent.......");
+            //return frame.ConvertToInt32();
         }
         private static byte[] GetFromFrameByteArray(NetMQFrame frame)
         {
@@ -233,5 +336,15 @@ namespace net_mq_decoder
 
 
         #endregion
+
+
+        protected static Tuple<NetMQMessage, Tuple<ServermoduleID,CallID>> SplitMessageInContentAndMetaData(NetMQMessage message)
+        {
+            var servermoduleID = Convert.ToInt32(message.Pop().ConvertToString());
+            var callID = Convert.ToInt32(message.Pop().ConvertToString());
+
+            return new Tuple<NetMQMessage, Tuple<ServermoduleID, CallID>>(message, new Tuple<ServermoduleID, CallID>(new ServermoduleID() { ID = servermoduleID },new CallID() { ID = callID }));
+            
+        }
     }
 }

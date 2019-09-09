@@ -7,7 +7,9 @@ using Newtonsoft.Json;
 using protocol.db_methods;
 using protocol.Exceptions;
 using protocol.file_methods;
+using protocol.methods.server_methods;
 using protocol.methods.slave_owner_methods;
+using protocol.model;
 using protocol.server_methods;
 using protocol.slave_owner_methods;
 using static net_mq_util.NetMqUtil;
@@ -28,11 +30,18 @@ namespace net_mq_encoder
 
         #region implementation of all generate method messages
 
-
+        protected static NetMQMessage GenerateBaseMessage(int serverModuleID, int callID)
+        {
+            NetMQMessage message = new NetMQMessage();
+            message.Append(GetFrame(serverModuleID));
+            message.Append(GetFrame(callID));
+            return message;
+        }
 
         #region encode methods for File servermodule
-        public static NetMQMessage GenerateFileModuleMethodMessage(FileMethod method)
+        public static NetMQMessage GenerateFileModuleMethodMessage(int servermoduleID, int callID, FileMethod method)
         {
+            var baseMessage = GenerateBaseMessage(servermoduleID, callID);
             //if (method is HelloWorldMethod _method)
             //{
             //    return GenerateHelloWorldMessage(_method);
@@ -46,22 +55,25 @@ namespace net_mq_encoder
 
 
         #region encode methods for Slave owner servermodule
-        public static NetMQMessage GenerateSlaveOwnerModuleMethodMessage(SlaveOwnerMethod method)
+        public static NetMQMessage GenerateSlaveOwnerModuleMethodMessage(int servermoduleID, int callID, SlaveOwnerMethod method)
         {
+            var baseMessage = GenerateBaseMessage(servermoduleID, callID);
+
             if (method is GetSlaveMethod)
             {
-                return GenerateGetSlaveMessage((GetSlaveMethod)method);
+                return GenerateGetSlaveMessage(baseMessage, (GetSlaveMethod)method);
 
             }else if (method is GetListOfRunnableApplicationsMethod )
             {
-                return GenerateGetListOfRunnableApplicationsMessage((GetListOfRunnableApplicationsMethod)method);
+                return GenerateGetListOfRunnableApplicationsMessage(baseMessage, (GetListOfRunnableApplicationsMethod)method);
             }
 
             throw new MethodFailedException();
         }
-        protected static NetMQMessage GenerateGetSlaveMessage(GetSlaveMethod method)
+        protected static NetMQMessage GenerateGetSlaveMessage(NetMQMessage message, GetSlaveMethod method)
         {
-            var message = new NetMQMessage();
+            //AppendMethodIdFrame(message, method.MethodId);
+
             string json = String.Empty;
 
             message.Append(GetFrame(GetSlaveMethod.METHOD_NAME));
@@ -73,16 +85,18 @@ namespace net_mq_encoder
             message.Append(json);
 
             return message;
+
         }
 
-        protected static NetMQMessage GenerateGetListOfRunnableApplicationsMessage(GetListOfRunnableApplicationsMethod method)
+        protected static NetMQMessage GenerateGetListOfRunnableApplicationsMessage(NetMQMessage message, GetListOfRunnableApplicationsMethod method)
         {
-            var message = new NetMQMessage();
+            //AppendMethodIdFrame(message, method.MethodId);
             string json = String.Empty;
 
             message.Append(GetFrame(GetListOfRunnableApplicationsMethod.METHOD_NAME));
 
             return message;
+
         }
         #endregion
 
@@ -90,8 +104,10 @@ namespace net_mq_encoder
 
 
         #region encode methods for database servermodule
-        public static NetMQMessage GenerateDatabaseModuleMethodMessage(DatabaseMethod method)
+        public static NetMQMessage GenerateDatabaseModuleMethodMessage(int servermoduleID, int callID, DatabaseMethod method)
         {
+            var baseMessage = GenerateBaseMessage(servermoduleID, callID);
+
             //if (method is HelloWorldMethod _method)
             //{
             //    return GenerateHelloWorldMessage(_method);
@@ -105,31 +121,70 @@ namespace net_mq_encoder
 
 
 
-
         #region encode methods for server module
-        public static NetMQMessage GenerateServerModuleMethodMessage(ServerMethod method)
+        public static NetMQMessage GenerateServerModuleMethodMessage(ServermoduleID servermoduleID, CallID callID, ServerMethod method)
         {
-            if (method is HelloWorldMethod _method)
+            var baseMessage = GenerateBaseMessage(servermoduleID.ID, callID.ID);
+
+            if (method is HelloWorldMethod)
             {
-                return GenerateHelloWorldMessage(_method);
+                return GenerateHelloWorldMessage(baseMessage, (HelloWorldMethod)method);
+            }else if (method is RegisterServermoduleMethod)
+            {
+                return GenerateRegisterServermoduleMessage(baseMessage, (RegisterSlaveOwnerServermoduleMethod)method);
             }
+            
 
             throw new MethodFailedException();
         }
 
 
         //most basic method with no real purpose
-        protected static NetMQMessage GenerateHelloWorldMessage(HelloWorldMethod method)
+        protected static NetMQMessage GenerateHelloWorldMessage(NetMQMessage message, HelloWorldMethod method)
         {
-            var message = new NetMQMessage();
-
             message.Append(GetFrame(HelloWorldMethod.METHOD_NAME));
+            //AppendMethodIdFrame(message, method.MethodId);
+
             message.Append(GetFrame(method.param1));
 
             return message;
         }
+        protected static NetMQMessage GenerateRegisterServermoduleMessage(NetMQMessage message, RegisterServermoduleMethod method)
+        {
 
+            message.Append(GetFrame(RegisterServermoduleMethod.METHOD_NAME));
+            message.Append(ConvertToJson(method.TargetType));
+            message.Append(ConvertToJson(method.ConnectionInfo));
 
+            return message;
+        }
+        
+
+        #endregion
+
+        #region encode response
+
+        public static NetMQMessage GenerateResponse(ServermoduleID servermoduleID,CallID callID, object obj)
+        {
+            var message = GenerateBaseMessage(servermoduleID.ID, callID.ID);
+
+            if(null == obj)
+            {
+                message.Append(GetFrame(ProtocolConstants.RESPONDE_NULL));
+            }
+            else
+            {
+                var jsonString = ConvertToJson(obj);
+                message.Append(GetFrame(jsonString));
+            }
+
+            return message;
+        }
+        //public static NetMQFrame GenerateResponseFrame(object obj)
+        //{
+        //    var jsonString = ConvertToJson(obj);
+        //    return GetFrame(jsonString);
+        //}
         #endregion
 
         #endregion
@@ -152,7 +207,14 @@ namespace net_mq_encoder
         }
         private static NetMQFrame GetFrame(int data)
         {
-            return new NetMQFrame(data);
+            return new NetMQFrame(data.ToString());
+        }
+
+        private static NetMQMessage AppendMethodIdFrame(NetMQMessage message, string methodId)
+        {
+            //TODO NOTICE THAT METHOD ID, should probably not really be used for anythin ---------------------------------------------------
+            message.Append(GetFrame(methodId));
+            return message;
         }
 
         /// <summary>
