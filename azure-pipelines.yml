@@ -36,18 +36,18 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(buildConfiguration) --no-restore'
 
-- task: DotNetCoreCLI@2
-  displayName: .NET Core NuGet Pack
-  inputs:
-    command: 'pack'
-    feedsToUse: 'config'
-    nugetConfigPath: './NuGet.Config'
-    packagesToPack: '**/protocol.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
+#- task: DotNetCoreCLI@2
+#  displayName: .NET Core NuGet Pack
+#  inputs:
+#    command: 'pack'
+#    feedsToUse: 'config'
+#    nugetConfigPath: './NuGet.Config'
+#    packagesToPack: '**/protocol.csproj'
+#    nobuild: true
+#    versioningScheme: 'byPrereleaseNumber'
+#    majorVersion: '1'
+#    minorVersion: '0'
+#    patchVersion: '0'
 
 - task: DotNetCoreCLI@2
   displayName: .NET Core NuGet Pack
