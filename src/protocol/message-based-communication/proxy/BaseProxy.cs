@@ -50,6 +50,15 @@ namespace message_based_communication.proxy
             this.proxyHelper.SendMessage(baseRequest, this);
         }
 
+        //should be implemented and call  SetStandardParameters(BaseRequest baseRequest, ModuleType moduleType)
+        protected abstract void SetStandardParameters(BaseRequest baseRequest);
+
+        protected void SetStandardParameters(BaseRequest baseRequest, ModuleType moduleType)
+        {
+            baseRequest.CallID = GenerateAndReserverCallID();
+            baseRequest.SenderModuleID = baseCommunicationModule.ModuleID;
+            baseRequest.TargetModuleType = moduleType;
+        }
 
     }
 }

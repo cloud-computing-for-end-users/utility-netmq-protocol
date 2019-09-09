@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>custom_message_based_implementation</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="message-based-communication" Version="1.0.0-CI-20190909-084423" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="custom-request\file-servermodule\" />
+    <Folder Include="custom-request\database-servermodule\" />
+    <Folder Include="custom-request\server-module\" />
+  </ItemGroup>
+
+</Project>
