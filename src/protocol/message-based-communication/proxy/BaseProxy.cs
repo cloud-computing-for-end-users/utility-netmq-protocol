@@ -60,5 +60,13 @@ namespace message_based_communication.proxy
             baseRequest.TargetModuleType = moduleType;
         }
 
+        protected static Action<Response> WrapCallBack<T>(Action<T> callBack) where T : class
+        {
+            return
+                (response) =>
+                {
+                    callBack.Invoke(response.Payload.ThePayload as T);
+                };
+        }
     }
 }

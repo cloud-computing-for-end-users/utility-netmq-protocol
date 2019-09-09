@@ -20,15 +20,51 @@ namespace custom_message_based_implementation.proxy
 
         public void GetSlave(PrimaryKey arg1, ApplicationInfo arg2, Action<SlaveConnection> callBack)
         {
-            //TODO
+
             Action<Response> handleResponse = res =>
             {
                 callBack.Invoke(res.Payload.ThePayload as SlaveConnection);
             };
 
+
+            var request = new RequestGetSlave();
+            
+            request.PrimaryKey = arg1;
+            request.AppInfo = arg2;
+            SetStandardParameters(request);
+
+            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request);
         }
 
-        private readonly ModuleType ModuleType = new ModuleType() { TypeID = ModuleTypeConst.MODULE_TYPE_SLAVE_OWNER };
+        public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)
+        {
+
+        }
+
+        protected static Action<Response> WrapCallBack<T>(Action<T> callBack) where T : class
+        {
+            return 
+                (response) =>
+            {
+                callBack.Invoke(response.Payload.ThePayload as T);
+            };
+        }
+
+
+
+
+
+
+
+
+
+
+        private readonly ModuleType moduleType = new ModuleType() { TypeID = ModuleTypeConst.MODULE_TYPE_SLAVE_OWNER };
+        protected override void SetStandardParameters(BaseRequest baseRequest)
+        {
+            base.SetStandardParameters(baseRequest, moduleType);
+        }
+
 
 
     }
