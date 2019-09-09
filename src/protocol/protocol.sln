@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "protocol", "protocol\protocol.csproj", "{583EB33F-F410-4DD1-B4D0-DA6E50CDE3D7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "protocol-test", "protocol-test\protocol-test.csproj", "{56DD346D-6F2D-40C8-9249-DB103DE33267}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "message-based-communication", "message-based-communication\message-based-communication.csproj", "{3D897ADF-D353-44A5-948C-9B99FC54CEB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManualTeSts", "message-based-comm-Test\ManualTeSts.csproj", "{3632C6DE-EFC9-4DF2-B0B6-5CC6C4AAAFF9}"
