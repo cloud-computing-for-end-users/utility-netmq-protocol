@@ -45,14 +45,14 @@ namespace ManualTeSts
 
 
 
-            var sm = new ServerModule(new Port() { ThePort = 5523 }, new ModuleType() { TypeID = ModuleTypeConsts.ServerModuleType });
+            var sm = new ServerModule(new Port() { ThePort = 5523 }, new ModuleType() { TypeID = ModuleTypeConsts.ServerModuleType }, customEncoding);
 
             //var reqSocket = new RequestSocket("tcp://127.0.0.1:5522");
 
             //var sm_conn_info = new ConnectionInformation() { IP = new IP() { TheIP = "127.0.0.1" }, Port = new Port() { ThePort = 5522 } };
             sm.Setup(sm_conn_info, new Port() { ThePort=5523 }, sm_conn_info, customEncoding);
 
-            var so = new SlaveOwnerServermodule(new Port() { ThePort = 9966 }, new ModuleType() { TypeID = ModuleTypeConsts.SlaveOwnerServermoduleModuleType});
+            var so = new SlaveOwnerServermodule(new Port() { ThePort = 9966 }, new ModuleType() { TypeID = ModuleTypeConsts.SlaveOwnerServermoduleModuleType}, customEncoding);
             //var so_conn_info = new ConnectionInformation() { IP = new IP() { TheIP = "127.0.0.1" }, Port = new Port() { ThePort = 9965 } };
 
             so.Setup(sm_conn_info,new Port() {ThePort=5523 }, so_conn_info, customEncoding);

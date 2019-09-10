@@ -16,16 +16,16 @@ namespace message_based_communication.module
 
         protected Dictionary<ModuleID, RequestSocket> moduleIdToProxyHelper = new Dictionary<ModuleID, RequestSocket>();
         protected Dictionary<ModuleType, RequestSocket> moduleTypeToProxyHelper = new Dictionary<ModuleType, RequestSocket>();
-
+        Encoding customEncoder;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="port"> the port that this router module will listen for modules trying to register</param>
-        public BaseRouterModule(Port portForRegistrationToRouter,ModuleType moduleType) : base(moduleType)
+        public BaseRouterModule(Port portForRegistrationToRouter,ModuleType moduleType, Encoding customEncoding) : base(moduleType)
         {
             new Thread(() => {
-                HandleRegisterModuleRequest(portForRegistrationToRouter);
+                HandleRegisterModuleRequest(portForRegistrationToRouter, customEncoding);
             }).Start();
 
         }
@@ -48,6 +48,9 @@ namespace message_based_communication.module
 
                 var connection = this.moduleIdToProxyHelper[response.TargetModuleID];
                 connection.SendMultipartMessage(Encoding.EncodeResponse(response));
+
+                var ack = connection.ReceiveMultipartMessage();
+                ProxyHelper.ValidateAckMessage(ack, response, this.customEncoder);
             }
             else
             {
@@ -91,22 +94,28 @@ namespace message_based_communication.module
         }
         protected void ForwardSendable(Sendable sendable)
         {
-            //throwExceptionIfMissiongSetupCall();
 
+            RequestSocket connection = null;
+            NetMQMessage message = null;
             if (sendable is BaseRequest request)
             {
-                this.moduleTypeToProxyHelper[request.TargetModuleType].SendMultipartMessage(Encoding.EncodeRequest(request));
+                connection= this.moduleTypeToProxyHelper[request.TargetModuleType];
+                message = Encoding.EncodeRequest(request);
             }
             else if (sendable is Response response)
             {
-                this.moduleIdToProxyHelper[response.TargetModuleID].SendMultipartMessage(Encoding.EncodeResponse(response));
-
+                connection = this.moduleIdToProxyHelper[response.TargetModuleID];
+                message = Encoding.EncodeResponse(response);
             }
+
+            connection.SendMultipartMessage(message);
+            var ack = connection.ReceiveMultipartMessage();
+            ProxyHelper.ValidateAckMessage(ack, sendable, this.customEncoder);
         }
 
 
 
-        private void HandleRegisterModuleRequest(Port port)
+        private void HandleRegisterModuleRequest(Port port, Encoding customEncoding)
         {
             ResponseSocket resSocket = new ResponseSocket("tcp://0.0.0.0:" + port.ThePort);
 
@@ -129,6 +138,8 @@ namespace message_based_communication.module
                 };
                 var encodedResponse = encoding.Encoding.EncodeRegisterModuleResponse(response);
                 resSocket.SendMultipartMessage(encodedResponse);
+
+                var ack = resSocket.ReceiveMultipartMessage(); //TODO consider to validate this acknoladgement at some point
             }
         }
 
@@ -145,6 +156,12 @@ namespace message_based_communication.module
             moduleIdToProxyHelper.Add(moduleID, requestSocket);
             moduleTypeToProxyHelper.Add(moduleType, requestSocket);
             return moduleID;
+        }
+
+        public override void Setup(ConnectionInformation baseRouterModule, Port baseRouterRegistrationPort, ConnectionInformation forSelf, Encoding customEncoding)
+        {
+            this.customEncoder = customEncoding;
+            base.Setup(baseRouterModule, baseRouterRegistrationPort, forSelf, customEncoding);
         }
     }
 }

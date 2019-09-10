@@ -90,7 +90,7 @@ namespace message_based_communication.connection
             //return callID;
         }
 
-        private static void ValidateAckMessage(NetMQMessage ackMessage, Sendable whatWasSent, Encoding customEncoding)
+        public static void ValidateAckMessage(NetMQMessage ackMessage, Sendable whatWasSent, Encoding customEncoding)
         {
             var decodedAck = customEncoding.DecodeIntoSendable(ackMessage);
             if (decodedAck is AcknowledgeRecivedSendable _ack)

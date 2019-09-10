@@ -1,15 +1,14 @@
 ﻿using ManualTeSts.request;
+using message_based_communication.encoding;
 using message_based_communication.model;
 using message_based_communication.module;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ManualTeSts
 {
     public class ServerModule : BaseRouterModule
     {
-        public ServerModule(Port portForRegistrationToRouter, ModuleType moduleType) : base(portForRegistrationToRouter, moduleType)
+        public ServerModule(Port portForRegistrationToRouter, ModuleType moduleType,Encoding customEncoding) : base(portForRegistrationToRouter, moduleType,customEncoding)
         {
         }
 

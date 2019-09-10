@@ -1,9 +1,9 @@
 ﻿using message_based_communication.connection;
+using message_based_communication.encoding;
 using message_based_communication.model;
 using message_based_communication.module;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ManualTeSts
 {
@@ -15,7 +15,7 @@ namespace ManualTeSts
 
         public override string CALL_ID_PREFIX => "SLAVE_OWNER_CALL_";
 
-        public SlaveOwnerServermodule(Port portForRegistrationToRouter, ModuleType moduleType) : base(portForRegistrationToRouter, moduleType)
+        public SlaveOwnerServermodule(Port portForRegistrationToRouter, ModuleType moduleType, Encoding customEncoding) : base(portForRegistrationToRouter, moduleType, customEncoding)
         {
         }
 
