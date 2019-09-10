@@ -28,8 +28,6 @@ namespace message_based_communication.module
                 HandleRegisterModuleRequest(portForRegistrationToRouter);
             }).Start();
 
-
-
         }
 
         //private void SendSendableUsingConnectionInformation(Sendable sendable, ConnectionInformation connectionInformation)
@@ -63,7 +61,7 @@ namespace message_based_communication.module
             //throwExceptionIfMissiongSetupCall();
             if (sendable is BaseRequest request)
             {
-                if (base.moduleType == request.TargetModuleType)
+                if (base.moduleType.TypeID.Equals(request.TargetModuleType.TypeID))
                 {
                     //handle request
                     HandleRequest(request); // I think this is infinite recursion
