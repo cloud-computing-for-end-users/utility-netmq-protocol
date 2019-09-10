@@ -1,5 +1,5 @@
-#Test to see if build server still updated YAML even if .yaml is ignore
-*.yaml
+#Test to see if build server still updated YAML even if .yml is ignore
+*.yml
 
 
 # Custom
