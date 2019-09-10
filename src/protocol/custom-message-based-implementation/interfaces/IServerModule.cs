@@ -5,7 +5,7 @@ using System.Text;
 
 namespace custom_message_based_implementation.interfaces
 {
-    interface IServerModule
+    public interface IServerModule
     {
 
     }

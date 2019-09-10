@@ -5,7 +5,7 @@ using System.Text;
 
 namespace custom_message_based_implementation.interfaces
 {
-    interface ISlaveOwnerServermodule
+    public interface ISlaveOwnerServermodule
     {
         SlaveConnection GetSlave(ApplicationInfo appInfo, PrimaryKey primaryKey);
 
