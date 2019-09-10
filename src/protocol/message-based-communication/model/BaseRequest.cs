@@ -12,7 +12,7 @@ namespace message_based_communication.model
 
         public override bool Equals(object obj)
         {
-            if (obj is ConnectionInformation other)
+            if (obj is BaseRequest other)
             {
                 return
                     base.Equals(other)

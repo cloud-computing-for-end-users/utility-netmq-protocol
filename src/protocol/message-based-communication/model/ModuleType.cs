@@ -11,5 +11,24 @@ namespace message_based_communication.model
     {
         public string TypeID{ get; set; }
 
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ModuleType other)
+            {
+                return
+                    TypeID.Equals(other.TypeID)
+                    ;
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return
+                unchecked(
+                TypeID.GetHashCode() * 17
+                );
+        }
+
     }
 }

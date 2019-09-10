@@ -22,7 +22,10 @@ namespace message_based_communication.model
         }
         public override int GetHashCode()
         {
-            return CallID.GetHashCode() * 17 + SenderModuleID.GetHashCode() * 17;
+            return unchecked( 
+                CallID.GetHashCode() * 17 
+                + SenderModuleID.GetHashCode() * 17
+                );
         }
 
     }
