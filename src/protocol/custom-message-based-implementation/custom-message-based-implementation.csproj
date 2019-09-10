@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="message-based-communication" Version="1.0.0-CI-20190910-081430" />
+    <PackageReference Include="message-based-communication" Version="1.0.0-CI-20190910-083644" />
   </ItemGroup>
 
   <ItemGroup>
