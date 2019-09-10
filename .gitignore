@@ -1,3 +1,7 @@
+#Test to see if build server still updated YAML even if .yaml is ignore
+*.yaml
+
+
 # Custom
 electron-client-hello-world/electroncgi.log
 electron-client-hello-world/dist/

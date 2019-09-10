@@ -29,29 +29,21 @@ namespace custom_message_based_implementation.proxy
 
             var request = new RequestGetSlave();
             
-            request.PrimaryKey = arg1;
-            request.AppInfo = arg2;
+            request.Arg1PrimaryKey = arg1;
+            request.Arg2AppInfo = arg2;
             SetStandardParameters(request);
 
-            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request);
+            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request); // TODO to fix update nuget package
         }
 
         public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)
         {
+            var handleResponse = WrapCallBack<List<ApplicationInfo>>(callBack);
+            var request = new RequestGetListOfRunningApplications();
+            this.SetStandardParameters(request);
 
+            base.SendMessage(handleResponse, request);
         }
-
-        protected static Action<Response> WrapCallBack<T>(Action<T> callBack) where T : class
-        {
-            return 
-                (response) =>
-            {
-                callBack.Invoke(response.Payload.ThePayload as T);
-            };
-        }
-
-
-
 
 
 

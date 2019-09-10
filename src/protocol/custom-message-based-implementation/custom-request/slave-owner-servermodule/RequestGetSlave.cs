@@ -12,8 +12,8 @@ namespace custom_message_based_implementation.custom_request.slave_owner_serverm
         public const string METHOD_ID = MethodID.METHOD_SLAVE_OWNER_GET_SLAVE;
         public override string SpecificMethodID => METHOD_ID;
 
-        public PrimaryKey PrimaryKey { get; set; }
-        public ApplicationInfo AppInfo{ get; set; }
+        public PrimaryKey Arg1PrimaryKey { get; set; }
+        public ApplicationInfo Arg2AppInfo{ get; set; }
 
     }
 }
