@@ -131,35 +131,36 @@ namespace message_based_communication.connection
                 }));
 
                 //handle message
-
-                if (sendable is BaseRequest _request)
+                if (baseModule is BaseRouterModule _router)
                 {
-                    //this is a request
-                    if (baseModule is BaseServerModule _baseServerModule)
-                    {
-                        _baseServerModule.HandleRequest(_request);
-                    }
-                    else
-                    {
-                        throw new Exception("Not supported");
-                    }
+                    _router.HandleSendable(sendable);
                 }
-                else if (sendable is Response response)
+                else
                 {
-                    lock (this.callIDToReponseHandler)
+                    if (sendable is BaseRequest _request)
                     {
-                        if (callIDToReponseHandler.ContainsKey(response.CallID.ID))
+                        //this is a request
+                        if (baseModule is BaseServerModule _baseServerModule)
                         {
-                            //this is a response made to a request
-                            callIDToReponseHandler[response.CallID.ID].HandleResponse(response);
+                            _baseServerModule.HandleRequest(_request);
+                        }
+                        else
+                        {
+                            throw new Exception("Not supported");
                         }
                     }
-                    
-
+                    else if (sendable is Response response)
+                    {
+                        lock (this.callIDToReponseHandler)
+                        {
+                            if (callIDToReponseHandler.ContainsKey(response.CallID.ID))
+                            {
+                                //this is a response made to a request
+                                callIDToReponseHandler[response.CallID.ID].HandleResponse(response);
+                            }
+                        }
+                    }
                 }
-
-
-
             }
         }
 
