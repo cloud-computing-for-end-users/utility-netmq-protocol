@@ -6,7 +6,9 @@ namespace custom_message_based_implementation.model
 {
     public class ApplicationInfo
     {
-        //TODO implement
+        public string ApplicationName { get; set; }
+        public string ApplicationVersion { get; set; }
+        public string RunningOnOperatingSystem { get; set; }
 
     }
 }
