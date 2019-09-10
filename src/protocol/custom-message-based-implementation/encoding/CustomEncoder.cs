@@ -13,6 +13,9 @@ namespace custom_message_based_implementation.encoding
             if (RequestGetSlave.METHOD_ID.Equals(specificMethodID))
             {
                 return TryDecodeJson<RequestGetSlave>(jsonString);
+            }else if (RequestGetListOfRunningApplications.METHOD_ID.Equals(specificMethodID))
+            {
+                return TryDecodeJson<RequestGetListOfRunningApplications>(jsonString);
             }
             else
             {

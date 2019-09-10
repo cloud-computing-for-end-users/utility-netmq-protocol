@@ -20,13 +20,6 @@ namespace custom_message_based_implementation.proxy
 
         public void GetSlave(PrimaryKey arg1, ApplicationInfo arg2, Action<SlaveConnection> callBack)
         {
-
-            Action<Response> handleResponse = res =>
-            {
-                callBack.Invoke(res.Payload.ThePayload as SlaveConnection);
-            };
-
-
             var request = new RequestGetSlave();
             
             request.Arg1PrimaryKey = arg1;
@@ -38,14 +31,11 @@ namespace custom_message_based_implementation.proxy
 
         public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)
         {
-            var handleResponse = WrapCallBack<List<ApplicationInfo>>(callBack);
             var request = new RequestGetListOfRunningApplications();
             this.SetStandardParameters(request);
 
-            base.SendMessage(handleResponse, request);
+            base.SendMessage(WrapCallBack<List<ApplicationInfo>>(callBack), request);
         }
-
-
 
 
 
