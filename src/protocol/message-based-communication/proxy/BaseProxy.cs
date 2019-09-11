@@ -1,6 +1,7 @@
 ﻿using message_based_communication.connection;
 using message_based_communication.model;
 using message_based_communication.module;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -65,10 +66,16 @@ namespace message_based_communication.proxy
             return
                 (response) =>
                 {
+                    if (response.Payload.ThePayload is JArray _jArray) // this is a "hack" because Newtonsoft can't deserialise to a list in the way the payload is made right now
+                    {
+                        response.Payload.ThePayload = _jArray.ToObject<T>();
+                    }
+
                     T obj = response.Payload.ThePayload as T;
+
                     if(null == obj)
                     {
-                        throw new Exception("Exception in the wrappedCallBack<T>(), Response: " + response + ", typeof(T):" + typeof(T));
+                        throw new Exception("Exception in the wrappedCallBack<T>(), Response: " + response + ", response type: " + response.GetType() + ", typeof(T):" + typeof(T));
                     }
                     callBack.Invoke(obj);
                 };
