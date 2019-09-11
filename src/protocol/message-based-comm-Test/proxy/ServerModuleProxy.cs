@@ -15,22 +15,22 @@ namespace ManualTeSts
         }
 
 
-        public void GetThatThingForSO(Action<string> callBack)
-        {
-            base.SendMessage(
-                res => {
-                    callBack.Invoke(res.Payload.ThePayload as string);
-                },
-                new GetStuffFromServerModule()
-                {
+        //public void GetThatThingForSO(Action<string> callBack)
+        //{
+        //    base.SendMessage(
+        //        res => {
+        //            callBack.Invoke(res.Payload.ThePayload as string);
+        //        },
+        //        new GetStuffFromServerModule()
+        //        {
 
-                    CallID = base.GenerateAndReserverCallID(),
-                    SenderModuleID = base.baseCommunicationModule.ModuleID,
-                    TargetModuleType = new ModuleType() { TypeID = ModuleTypeConsts.ServerModuleType},
-                    WhatIWant = "I want that thing you know"
-                });
+        //            CallID = base.GenerateAndReserverCallID(),
+        //            SenderModuleID = base.baseCommunicationModule.ModuleID,
+        //            TargetModuleType = new ModuleType() { TypeID = ModuleTypeConsts.ServerModuleType},
+        //            WhatIWant = "I want that thing you know"
+        //        });
 
-        }
+        //}
 
         private readonly ModuleType moduleType = new ModuleType() { TypeID = ModuleTypeConsts.SlaveOwnerServermoduleModuleType};
         protected override void SetStandardParameters(BaseRequest baseRequest)

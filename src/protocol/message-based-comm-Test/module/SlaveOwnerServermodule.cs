@@ -25,13 +25,13 @@ namespace ManualTeSts
             throw new NotImplementedException();
         }
 
-        public void Test()
-        {
+        //public void Test()
+        //{
 
-            new ServerModuleProxy(base.proxyHelper,this).GetThatThingForSO(HandleTestResponse);    
+        //    new ServerModuleProxy(base.proxyHelper,this).GetThatThingForSO(HandleTestResponse);    
 
 
-        }
+        //}
 
         public void HandleTestResponse(string response)
         {

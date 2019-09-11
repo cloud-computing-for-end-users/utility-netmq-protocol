@@ -68,7 +68,7 @@ namespace message_based_communication.proxy
                     T obj = response.Payload.ThePayload as T;
                     if(null == obj)
                     {
-                        throw new Exception("Exception in the wrappedCallBack<T>(), Response: " + response);
+                        throw new Exception("Exception in the wrappedCallBack<T>(), Response: " + response + ", typeof(T):" + typeof(T));
                     }
                     callBack.Invoke(obj);
                 };

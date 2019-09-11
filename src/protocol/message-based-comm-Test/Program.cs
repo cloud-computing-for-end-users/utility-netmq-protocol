@@ -57,9 +57,6 @@ namespace ManualTeSts
 
             so.Setup(sm_conn_info,new Port() {ThePort=5523 }, so_conn_info, customEncoding);
 
-            so.Test();
-
-
             Console.ReadKey();
 
         }
