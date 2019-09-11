@@ -125,7 +125,7 @@ namespace message_based_communication.connection
                 inTraffic.SendMultipartMessage(Encoding.EncodeAckRecivedSendable(new AcknowledgeRecivedSendable()
                 {
                     CallID = sendable.CallID,
-                    SenderModuleID = null, //this.baseModule.ModuleID,
+                    SenderModuleID = this.baseModule.ModuleID, //TODO this whole ack think is currently kinda wrong or atleast it is just the next node in line that will send back an ack
                     TargetModuleID = sendable.SenderModuleID
                 }));
 
