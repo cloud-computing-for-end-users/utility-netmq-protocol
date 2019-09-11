@@ -68,13 +68,11 @@ namespace message_based_communication.module
                 {
                     //handle request
                     HandleRequest(request);
-
                 }
                 else
                 {
                     //forward the message
                     ForwardSendable(request);
-
                 }
             }
             else if (sendable is Response response)
