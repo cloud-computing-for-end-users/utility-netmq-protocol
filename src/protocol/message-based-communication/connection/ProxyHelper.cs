@@ -125,41 +125,46 @@ namespace message_based_communication.connection
                 inTraffic.SendMultipartMessage(Encoding.EncodeAckRecivedSendable(new AcknowledgeRecivedSendable()
                 {
                     CallID = sendable.CallID,
-                    SenderModuleID = this.baseModule.ModuleID,
+                    SenderModuleID = null, //this.baseModule.ModuleID,
                     TargetModuleID = sendable.SenderModuleID
                 }));
-                
 
-                //handle message
-                if (baseModule is BaseRouterModule _router)
+
+
+                if (sendable is BaseRequest _request)
                 {
-                    _router.HandleSendable(sendable);
-                }
-                else
-                {
-                    if (sendable is BaseRequest _request)
+                    //this is a request
+                    if (baseModule is BaseServerModule _baseServerModule
+                        && _request.TargetModuleType.TypeID.Equals(this.baseModule.ModuleType.TypeID)
+                        )
                     {
-                        //this is a request
-                        if (baseModule is BaseServerModule _baseServerModule)
-                        {
-                            _baseServerModule.HandleRequest(_request);
-                        }
-                        else
-                        {
-                            throw new Exception("Not supported");
-                        }
+                        _baseServerModule.HandleRequest(_request);
                     }
-                    else if (sendable is Response response)
+                    else if (baseModule is BaseRouterModule _router)
+                    {
+                        _router.HandleSendable(sendable);
+                    }
+                }
+                else if (sendable is Response response)
+                {
+                    if (baseModule is BaseRouterModule _router
+                        && response.TargetModuleID.ID != baseModule.ModuleID.ID
+                        )
+                    {
+                        _router.HandleSendable(response);
+                    }
+                    else
                     {
                         lock (this.callIDToReponseHandler)
                         {
-                            if (callIDToReponseHandler.ContainsKey(response.CallID.ID))
+                            if (callIDToReponseHandler.ContainsKey(response.CallID.ID)
                             {
                                 //this is a response made to a request
                                 callIDToReponseHandler[response.CallID.ID].HandleResponse(response);
                             }
                         }
                     }
+
                 }
             }
         }

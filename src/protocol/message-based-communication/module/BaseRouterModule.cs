@@ -67,7 +67,7 @@ namespace message_based_communication.module
                 if (base.moduleType.TypeID.Equals(request.TargetModuleType.TypeID))
                 {
                     //handle request
-                    HandleRequest(request); // I think this is infinite recursion
+                    HandleRequest(request);
 
                 }
                 else

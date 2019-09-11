@@ -16,6 +16,7 @@ namespace message_based_communication.module
         protected ModuleID moduleID;
         public ModuleID ModuleID { get { return this.moduleID;  } }
         protected ModuleType moduleType;
+        public ModuleType ModuleType { get { return moduleType; } }
         protected ConnectionInformation communicationHub; //this must point to a BaseRouterModule connection
 
         public BaseCommunicationModule(ModuleType moduleType)
