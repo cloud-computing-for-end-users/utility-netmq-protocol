@@ -30,7 +30,7 @@ namespace message_based_communication.module
             //SetupHasBeenCalled = true;
 
             this.communicationHub = baseRouterModule;
-
+                
             this.proxyHelper = new ProxyHelper();
             //this.connectionWrapper.Setup(baseRouterModule, this);
 
