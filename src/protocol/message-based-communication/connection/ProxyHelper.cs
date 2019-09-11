@@ -66,7 +66,6 @@ namespace message_based_communication.connection
             var ack = outTraffic.ReceiveMultipartMessage();
 
             ValidateAckMessage(ack, response, this.customEncoding);
-
         }
 
         /// <summary>
@@ -129,6 +128,7 @@ namespace message_based_communication.connection
                     SenderModuleID = this.baseModule.ModuleID,
                     TargetModuleID = sendable.SenderModuleID
                 }));
+                
 
                 //handle message
                 if (baseModule is BaseRouterModule _router)

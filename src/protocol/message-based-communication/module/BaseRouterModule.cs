@@ -138,8 +138,6 @@ namespace message_based_communication.module
                 };
                 var encodedResponse = encoding.Encoding.EncodeRegisterModuleResponse(response);
                 resSocket.SendMultipartMessage(encodedResponse);
-
-                var ack = resSocket.ReceiveMultipartMessage(); //TODO consider to validate this acknoladgement at some point
             }
         }
 

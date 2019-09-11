@@ -57,6 +57,7 @@ namespace message_based_communication.module
             var encodedReq = encoding.Encoding.EncodeRegisterModuleRequest(request);
             reqSocker.SendMultipartMessage(encodedReq);
 
+            //reciving response
             var encodedResponse = reqSocker.ReceiveMultipartMessage();
             var decodedResponse = encoding.Encoding.TryDecodeRegisterModuleResponse(encodedResponse);
 
