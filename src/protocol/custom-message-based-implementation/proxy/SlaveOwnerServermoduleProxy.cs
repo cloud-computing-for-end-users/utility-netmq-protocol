@@ -26,7 +26,7 @@ namespace custom_message_based_implementation.proxy
             request.Arg2AppInfo = arg2;
             SetStandardParameters(request);
 
-            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request); // TODO to fix update nuget package
+            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request);
         }
 
         public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)

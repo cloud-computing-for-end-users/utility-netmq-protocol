@@ -58,14 +58,19 @@ namespace message_based_communication.connection
 
         public void SendResponse(Response response)
         {
-            var res = Encoding.EncodeResponse(response);
-            outTraffic.SendMultipartMessage(res);
+            lock (outTraffic)
+            {
 
-            //Check for acknoladgement from recipient
+                var res = Encoding.EncodeResponse(response);
+                outTraffic.SendMultipartMessage(res);
 
-            var ack = outTraffic.ReceiveMultipartMessage();
+                //Check for acknoladgement from recipient
 
-            ValidateAckMessage(ack, response, this.customEncoding);
+                var ack = outTraffic.ReceiveMultipartMessage();
+
+                ValidateAckMessage(ack, response, this.customEncoding);
+            }
+
         }
 
         /// <summary>
@@ -75,18 +80,20 @@ namespace message_based_communication.connection
         /// <param name="baseProxy"> The Base proxy that will handle the response</param>
         public void SendMessage(BaseRequest message, BaseProxy baseProxy)
         {
-            //var callID = new Random().Next();
+            lock (outTraffic)
+            {
 
-            callIDToReponseHandler.Add(message.CallID.ID, baseProxy);
+                //var callID = new Random().Next();
 
-            var req = Encoding.EncodeRequest(message);
-            this.outTraffic.SendMultipartMessage(req);
+                callIDToReponseHandler.Add(message.CallID.ID, baseProxy);
 
-            //listen for recive ack.
-            var ack = this.outTraffic.ReceiveMultipartMessage();
-            ValidateAckMessage(ack, message, this.customEncoding);
+                var req = Encoding.EncodeRequest(message);
+                this.outTraffic.SendMultipartMessage(req);
 
-            //return callID;
+                //listen for recive ack.
+                var ack = this.outTraffic.ReceiveMultipartMessage();
+                ValidateAckMessage(ack, message, this.customEncoding);
+            }
         }
 
         public static void ValidateAckMessage(NetMQMessage ackMessage, Sendable whatWasSent, Encoding customEncoding)
