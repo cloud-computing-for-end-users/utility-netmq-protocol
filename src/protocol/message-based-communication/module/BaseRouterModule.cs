@@ -15,8 +15,10 @@ namespace message_based_communication.module
         abstract protected string MODULE_ID_PREFIXES { get; }
 
         protected Dictionary<ModuleID, RequestSocket> moduleIdToProxyHelper = new Dictionary<ModuleID, RequestSocket>();
-        protected Dictionary<ModuleType, RequestSocket> moduleTypeToProxyHelper = new Dictionary<ModuleType, RequestSocket>();
+        protected Dictionary<ModuleType, List<RequestSocket>> moduleTypeToProxyHelper = new Dictionary<ModuleType, List<RequestSocket>>();
         Encoding customEncoder;
+
+        private Random Random = new Random(); // used to pick a randon RequestSocket when several of the same moduleType is registered
 
         /// <summary>
         /// 
@@ -97,7 +99,7 @@ namespace message_based_communication.module
             NetMQMessage message = null;
             if (sendable is BaseRequest request)
             {
-                connection= this.moduleTypeToProxyHelper[request.TargetModuleType];
+                connection= this.moduleTypeToProxyHelper[request.TargetModuleType][Random.Next(moduleTypeToProxyHelper.Count-1)];
                 message = Encoding.EncodeRequest(request);
             }
             else if (sendable is Response response)
@@ -150,7 +152,12 @@ namespace message_based_communication.module
 
             var requestSocket = new RequestSocket("tcp://" + connectionInformation.IP.TheIP + ":" + connectionInformation.Port.ThePort);
             moduleIdToProxyHelper.Add(moduleID, requestSocket);
-            moduleTypeToProxyHelper.Add(moduleType, requestSocket);
+            if (false == moduleTypeToProxyHelper.ContainsKey(moduleType)){
+                moduleTypeToProxyHelper.Add(moduleType, new List<RequestSocket>());
+
+            }
+            moduleTypeToProxyHelper[moduleType].Add(requestSocket);
+
             return moduleID;
         }
 
