@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="message-based-communication" Version="1.0.0-CI-20190911-090201" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="custom-request\file-servermodule\" />
     <Folder Include="custom-request\database-servermodule\" />
     <Folder Include="custom-request\server-module\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
   </ItemGroup>
 
 </Project>

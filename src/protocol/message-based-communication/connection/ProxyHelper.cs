@@ -44,13 +44,15 @@ namespace message_based_communication.connection
             this.outTraffic = new RequestSocket("tcp://" + routerModule.IP.TheIP + ":" + routerModule.Port.ThePort);
 
 
-            new Thread(() =>
+            var t = new Thread(() =>
             {
 
                 ReciveSendable(customEncoding, listeningOnPort);
 
-            }).Start();
-
+            });
+            Console.WriteLine(t.IsBackground);
+            t.IsBackground = true;
+            t.Start();
         }
 
 
