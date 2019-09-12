@@ -54,11 +54,11 @@ namespace message_based_communication.proxy
         //should be implemented and call  SetStandardParameters(BaseRequest baseRequest, ModuleType moduleType)
         protected abstract void SetStandardParameters(BaseRequest baseRequest);
 
-        protected void SetStandardParameters(BaseRequest baseRequest, ModuleType moduleType)
+        protected void SetStandardParameters(BaseRequest baseRequest, ModuleType targetModuleType)
         {
             baseRequest.CallID = GenerateAndReserverCallID();
             baseRequest.SenderModuleID = baseCommunicationModule.ModuleID;
-            baseRequest.TargetModuleType = moduleType;
+            baseRequest.TargetModuleType = targetModuleType;
         }
 
         protected static Action<Response> WrapCallBack<T>(Action<T> callBack) where T : class

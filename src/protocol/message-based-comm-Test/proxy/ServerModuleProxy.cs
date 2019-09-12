@@ -32,10 +32,10 @@ namespace ManualTeSts
 
         //}
 
-        private readonly ModuleType moduleType = new ModuleType() { TypeID = ModuleTypeConsts.SlaveOwnerServermoduleModuleType};
+        private readonly ModuleType targetModuleType = new ModuleType() { TypeID = ModuleTypeConsts.SlaveOwnerServermoduleModuleType};
         protected override void SetStandardParameters(BaseRequest baseRequest)
         {
-            base.SetStandardParameters(baseRequest, moduleType);
+            base.SetStandardParameters(baseRequest, targetModuleType);
         }
     }
 }

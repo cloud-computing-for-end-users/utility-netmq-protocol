@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>client_slave_message_communication</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="custom-message-based-implementation">
+      <HintPath>..\custom-message-based-implementation\bin\Debug\netcoreapp2.2\custom-message-based-implementation.dll</HintPath>
+    </Reference>
+    <Reference Include="message-based-communication">
+      <HintPath>..\message-based-communication\bin\Debug\netcoreapp2.2\message-based-communication.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
