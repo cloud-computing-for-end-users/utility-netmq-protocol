@@ -26,9 +26,12 @@ namespace message_based_communication.module
         /// <param name="port"> the port that this router module will listen for modules trying to register</param>
         public BaseRouterModule(Port portForRegistrationToRouter,ModuleType moduleType, Encoding customEncoding) : base(moduleType)
         {
-            new Thread(() => {
+            var t = new Thread(() => {
                 HandleRegisterModuleRequest(portForRegistrationToRouter, customEncoding);
-            }).Start();
+            });
+
+            t.IsBackground = true;
+            t.Start();
 
         }
 

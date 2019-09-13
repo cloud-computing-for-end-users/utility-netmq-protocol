@@ -62,7 +62,6 @@ namespace message_based_communication.connection
         {
             lock (outTraffic)
             {
-
                 var res = Encoding.EncodeResponse(response);
                 outTraffic.SendMultipartMessage(res);
 

@@ -26,7 +26,6 @@ namespace client_slave_message_communication.proxy
         /// <param name="pk"></param>
         public void Handshake(Action<Port> callBack, PrimaryKey pk)
         {
-
             var request = new Handshake() { arg1PrimaryKey = pk };
             SetStandardParameters(request);
 
@@ -49,7 +48,7 @@ namespace client_slave_message_communication.proxy
 
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
-            var request = new DoMouseAction() { arg1MouseAction = action };
+            var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
             SetStandardParameters(request);
 
             SendMessage(WrapNoParamAction(callBack), request);

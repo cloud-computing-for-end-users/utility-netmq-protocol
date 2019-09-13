@@ -5,4 +5,14 @@
     <RootNamespace>client_slave_message_communication</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="custom-message-based-implementation">
+      <HintPath>..\custom-message-based-implementation\bin\Debug\netcoreapp2.2\custom-message-based-implementation.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

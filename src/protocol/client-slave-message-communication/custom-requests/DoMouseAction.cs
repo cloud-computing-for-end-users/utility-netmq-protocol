@@ -6,9 +6,10 @@ using System.Text;
 
 namespace client_slave_message_communication.custom_requests
 {
-    public class DoMouseAction : BaseRequest
+    public class DoMouseAction<T> : BaseRequest where T : BaseMouseAction
     {
         public override string SpecificMethodID => consts.MethodID.METHOD_ID_DO_MOUSE_ACTION;
-        public BaseMouseAction  arg1MouseAction{ get; set; }
+        public T  arg1MouseAction{ get; set; }
+
     }
 }
