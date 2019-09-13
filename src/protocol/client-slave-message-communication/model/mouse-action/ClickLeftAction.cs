@@ -5,8 +5,10 @@ using System.Text;
 
 namespace client_slave_message_communication.model.mouse_action
 {
-    public class Click : BaseMouseAction
+    public class ClickLeftAction : BaseMouseAction
     {
         public RelativeScreenLocation ScreenLocation { get; set; }
+
+        public override MouseAction Action => MouseAction.ClickLeft;
     }
 }

@@ -152,9 +152,9 @@ namespace message_based_communication.module
 
             var requestSocket = new RequestSocket("tcp://" + connectionInformation.IP.TheIP + ":" + connectionInformation.Port.ThePort);
             moduleIdToProxyHelper.Add(moduleID, requestSocket);
+
             if (false == moduleTypeToProxyHelper.ContainsKey(moduleType)){
                 moduleTypeToProxyHelper.Add(moduleType, new List<RequestSocket>());
-
             }
             moduleTypeToProxyHelper[moduleType].Add(requestSocket);
 
