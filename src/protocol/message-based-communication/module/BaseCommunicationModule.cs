@@ -35,37 +35,38 @@ namespace message_based_communication.module
             //this.connectionWrapper.Setup(baseRouterModule, this);
 
 
-            this.proxyHelper.ModuleID= RegisterModule(this.moduleType, baseRouterModule, baseRouterRegistrationPort, forSelf);
+
+            //this.proxyHelper.ModuleID= RegisterModule(this.moduleType, baseRouterModule, baseRouterRegistrationPort, forSelf);
 
             ////throw new NotImplementedException();
             ///
 
-            this.proxyHelper.Setup(baseRouterModule, this, customEncoding, forSelf.Port);
+            this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, this, customEncoding, forSelf.Port);
 
         }
 
-        private static ModuleID RegisterModule(ModuleType moduleType, ConnectionInformation baseRouterModule,Port baseRouterRegistrationPort , ConnectionInformation forSelf)
-        {
-            var reqSocker = new RequestSocket("tcp://" + baseRouterModule.IP.TheIP  + ":"+ baseRouterRegistrationPort.ThePort);
+        //private static ModuleID RegisterModule(ModuleType moduleType, ConnectionInformation baseRouterModule,Port baseRouterRegistrationPort , ConnectionInformation forSelf)
+        //{
+        //    var reqSocker = new RequestSocket("tcp://" + baseRouterModule.IP.TheIP  + ":"+ baseRouterRegistrationPort.ThePort);
 
-            var request = new RegisterModuleRequest()
-            {
-                CallID = new CallID() { ID = "SETUP_" + new Random().Next() },
-                ModuleType = moduleType,
-                ConnInfo = forSelf
-            };
+        //    var request = new RegisterModuleRequest()
+        //    {
+        //        CallID = new CallID() { ID = "SETUP_" + new Random().Next() },
+        //        ModuleType = moduleType,
+        //        ConnInfo = forSelf
+        //    };
 
-            var encodedReq = encoding.Encoding.EncodeRegisterModuleRequest(request);
-            reqSocker.SendMultipartMessage(encodedReq);
+        //    var encodedReq = encoding.Encoding.EncodeRegisterModuleRequest(request);
+        //    reqSocker.SendMultipartMessage(encodedReq);
 
-            //reciving response
-            var encodedResponse = reqSocker.ReceiveMultipartMessage();
-            var decodedResponse = encoding.Encoding.TryDecodeRegisterModuleResponse(encodedResponse);
+        //    //reciving response
+        //    var encodedResponse = reqSocker.ReceiveMultipartMessage();
+        //    var decodedResponse = encoding.Encoding.TryDecodeRegisterModuleResponse(encodedResponse);
 
 
-            return decodedResponse.ModuleID;
+        //    return decodedResponse.ModuleID;
 
-        }
+        //}
 
 
     }

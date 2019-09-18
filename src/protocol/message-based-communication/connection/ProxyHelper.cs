@@ -2,6 +2,7 @@
 using message_based_communication.model;
 using message_based_communication.module;
 using message_based_communication.proxy;
+using message_based_communication.setup;
 using NetMQ;
 using NetMQ.Sockets;
 using System;
@@ -38,7 +39,7 @@ namespace message_based_communication.connection
         /// </summary>
         /// <param name="routerModule"></param>
         /// <param name="baseModule"></param>
-        public void Setup(ConnectionInformation routerModule, BaseCommunicationModule baseModule, Encoding customEncoding, Port listeningOnPort)
+        public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort,ModuleType moduleType, BaseCommunicationModule baseModule, Encoding customEncoding, Port listeningOnPort)
         {
             //this.routerModule = routerModule;
             this.baseModule = baseModule;
@@ -58,6 +59,28 @@ namespace message_based_communication.connection
             t.Start();
         }
 
+        private static ModuleID RegisterModule(ModuleType moduleType, ConnectionInformation baseRouterModule, Port baseRouterRegistrationPort, ConnectionInformation forSelf)
+        {
+            var reqSocker = new RequestSocket("tcp://" + baseRouterModule.IP.TheIP + ":" + baseRouterRegistrationPort.ThePort);
+
+            var request = new RegisterModuleRequest()
+            {
+                CallID = new CallID() { ID = "SETUP_" + new Random().Next() },
+                ModuleType = moduleType,
+                ConnInfo = forSelf
+            };
+
+            var encodedReq = encoding.Encoding.EncodeRegisterModuleRequest(request);
+            reqSocker.SendMultipartMessage(encodedReq);
+
+            //reciving response
+            var encodedResponse = reqSocker.ReceiveMultipartMessage();
+            var decodedResponse = encoding.Encoding.TryDecodeRegisterModuleResponse(encodedResponse);
+
+
+            return decodedResponse.ModuleID;
+
+        }
 
 
 
