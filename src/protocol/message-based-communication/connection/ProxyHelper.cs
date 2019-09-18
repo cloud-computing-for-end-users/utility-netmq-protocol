@@ -39,7 +39,7 @@ namespace message_based_communication.connection
         /// </summary>
         /// <param name="routerModule"></param>
         /// <param name="baseModule"></param>
-        public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort,ModuleType moduleType, BaseCommunicationModule baseModule, Encoding customEncoding, Port listeningOnPort)
+        public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort,ModuleType moduleType,ConnectionInformation forSelf ,BaseCommunicationModule baseModule, Encoding customEncoding)
         {
             //this.routerModule = routerModule;
             this.baseModule = baseModule;
@@ -47,11 +47,12 @@ namespace message_based_communication.connection
 
             this.outTraffic = new RequestSocket("tcp://" + routerModule.IP.TheIP + ":" + routerModule.Port.ThePort);
 
+            this.ModuleID = RegisterModule(this.baseModule.ModuleType, routerModule, baseRouterRegistrationPort, forSelf);
 
             var t = new Thread(() =>
             {
 
-                ReciveSendable(customEncoding, listeningOnPort);
+                ReciveSendable(customEncoding, forSelf.Port);
 
             });
             Console.WriteLine(t.IsBackground);

@@ -41,7 +41,7 @@ namespace message_based_communication.module
             ////throw new NotImplementedException();
             ///
 
-            this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, this, customEncoding, forSelf.Port);
+            this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, forSelf, this, customEncoding);
 
         }
 
