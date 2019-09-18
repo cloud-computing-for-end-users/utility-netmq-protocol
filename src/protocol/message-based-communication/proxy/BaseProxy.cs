@@ -57,7 +57,7 @@ namespace message_based_communication.proxy
         protected void SetStandardParameters(BaseRequest baseRequest, ModuleType targetModuleType)
         {
             baseRequest.CallID = GenerateAndReserverCallID();
-            baseRequest.SenderModuleID = baseCommunicationModule.ModuleID;
+            baseRequest.SenderModuleID = proxyHelper.ModuleID;
             baseRequest.TargetModuleType = targetModuleType;
         }
 

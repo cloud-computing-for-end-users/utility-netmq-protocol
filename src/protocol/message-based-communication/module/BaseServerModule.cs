@@ -22,7 +22,7 @@ namespace message_based_communication.module
             return new Response()
             {
                 CallID = baseRequest.CallID,
-                SenderModuleID = this.moduleID,
+                SenderModuleID = this.proxyHelper.ModuleID,
                 TargetModuleID = baseRequest.SenderModuleID,
                 Payload = new Payload() { ThePayload = responsePayload }
             };

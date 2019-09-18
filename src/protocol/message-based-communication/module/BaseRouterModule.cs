@@ -82,7 +82,7 @@ namespace message_based_communication.module
             }
             else if (sendable is Response response)
             {
-                if (base.moduleID == response.TargetModuleID)
+                if (base.proxyHelper.ModuleID == response.TargetModuleID)
                 {
                     //response for self
                     //HandleResponse(response);

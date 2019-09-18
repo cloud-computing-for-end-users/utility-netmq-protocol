@@ -13,11 +13,11 @@ namespace message_based_communication.module
         public abstract string CALL_ID_PREFIX { get; }
 
         protected ProxyHelper proxyHelper;
-        protected ModuleID moduleID;
-        public ModuleID ModuleID { get { return this.moduleID;  } }
+        //protected ModuleID moduleID;
+        //public ModuleID ModuleID { get { return this.moduleID;  } }
         protected ModuleType moduleType;
         public ModuleType ModuleType { get { return moduleType; } }
-        protected ConnectionInformation communicationHub; //this must point to a BaseRouterModule connection
+        //protected ConnectionInformation communicationHub; //this must point to a BaseRouterModule connection
 
         public BaseCommunicationModule(ModuleType moduleType)
         {
@@ -29,13 +29,13 @@ namespace message_based_communication.module
         {
             //SetupHasBeenCalled = true;
 
-            this.communicationHub = baseRouterModule;
+            //this.communicationHub = baseRouterModule;
                 
             this.proxyHelper = new ProxyHelper();
             //this.connectionWrapper.Setup(baseRouterModule, this);
 
 
-            this.moduleID = RegisterModule(this.moduleType, baseRouterModule, baseRouterRegistrationPort, forSelf);
+            this.proxyHelper.ModuleID= RegisterModule(this.moduleType, baseRouterModule, baseRouterRegistrationPort, forSelf);
 
             ////throw new NotImplementedException();
             ///

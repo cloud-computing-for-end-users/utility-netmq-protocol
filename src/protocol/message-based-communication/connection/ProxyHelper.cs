@@ -23,6 +23,9 @@ namespace message_based_communication.connection
         private BaseCommunicationModule baseModule;
         private Encoding customEncoding;
 
+        //protected ModuleID moduleID;
+        public ModuleID ModuleID { get; /*{ return this.moduleID; }*/ set; }
+
         private Dictionary<string, BaseProxy> callIDToReponseHandler = new Dictionary<string, BaseProxy>();
 
         public ProxyHelper()
@@ -133,7 +136,7 @@ namespace message_based_communication.connection
                 inTraffic.SendMultipartMessage(Encoding.EncodeAckRecivedSendable(new AcknowledgeRecivedSendable()
                 {
                     CallID = sendable.CallID,
-                    SenderModuleID = this.baseModule.ModuleID, //TODO this whole ack think is currently kinda wrong or atleast it is just the next node in line that will send back an ack
+                    SenderModuleID = this.ModuleID, //TODO this whole ack think is currently kinda wrong or atleast it is just the next node in line that will send back an ack
                     TargetModuleID = sendable.SenderModuleID
                 }));
 
@@ -156,7 +159,7 @@ namespace message_based_communication.connection
                 else if (sendable is Response response)
                 {
                     if (baseModule is BaseRouterModule _router
-                        && response.TargetModuleID.ID != baseModule.ModuleID.ID
+                        && response.TargetModuleID.ID != ModuleID.ID
                         )
                     {
                         _router.HandleSendable(response);
