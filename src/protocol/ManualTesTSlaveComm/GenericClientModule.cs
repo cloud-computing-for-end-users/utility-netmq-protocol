@@ -33,5 +33,32 @@ namespace ManualTesTSlaveComm
         {
             Console.WriteLine("Got a callback");
         }
+
+
+
+        private void getPortCallBack(out object obj, Port port)
+        {
+            obj = port;
+        }
+
+        public Port GetPort()
+        {
+            object result = null;
+
+            Action<Port> callBack = port =>
+            {
+                getPortCallBack(out result, port);
+
+            };
+            new SlaveProxy(base.proxyHelper, this).GetImageProducerConnectionInformation(callBack);
+
+
+            while (null == result)
+            {
+                
+            }
+            return result as Port;
+        }
+
     }
 }

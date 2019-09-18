@@ -31,12 +31,12 @@ namespace client_slave_message_communication.proxy
 
             SendMessage(WrapCallBack<Port>(callBack), request);
         }
-        public void GetImageProducerConnectionInformation(Action callBack)
+        public void GetImageProducerConnectionInformation(Action<Port> callBack)
         {
             var request = new GetImageProducerConnectionInfo();
             SetStandardParameters(request);
 
-            SendMessage(WrapNoParamAction(callBack), request);
+            SendMessage(WrapCallBack<Port>(callBack), request);
         }
         public void DoKeyboardAction(Action callBack, BaseKeyboardAction action)
         {

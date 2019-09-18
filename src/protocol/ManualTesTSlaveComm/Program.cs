@@ -39,6 +39,11 @@ namespace ManualTesTSlaveComm
                 FromTop = new client_slave_message_communication.model.Percent() { ThePercentage = 50 }
             });
 
+            Thread.Sleep(5000);
+
+            var port = client.GetPort();
+            Console.WriteLine(port.ThePort);
+
             Console.ReadKey();
         }
     }
