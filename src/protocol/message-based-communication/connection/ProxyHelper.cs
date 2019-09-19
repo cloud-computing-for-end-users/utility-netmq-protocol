@@ -47,7 +47,7 @@ namespace message_based_communication.connection
 
             this.outTraffic = new RequestSocket("tcp://" + routerModule.IP.TheIP + ":" + routerModule.Port.ThePort);
 
-            this.ModuleID = RegisterModule(this.baseModule.ModuleType, routerModule, baseRouterRegistrationPort, forSelf);
+            this.ModuleID = RegisterModule(baseModule.ModuleType, routerModule, baseRouterRegistrationPort, forSelf);
 
             var t = new Thread(() =>
             {
@@ -55,7 +55,6 @@ namespace message_based_communication.connection
                 ReciveSendable(customEncoding, forSelf.Port);
 
             });
-            Console.WriteLine(t.IsBackground);
             t.IsBackground = true;
             t.Start();
         }
@@ -129,10 +128,10 @@ namespace message_based_communication.connection
             var decodedAck = customEncoding.DecodeIntoSendable(ackMessage);
             if (decodedAck is AcknowledgeRecivedSendable _ack)
             {
-                if (false == (_ack.CallID.ID == whatWasSent.CallID.ID))
-                {
-                    throw new Exception();
-                }
+                //if (false == (_ack.CallID.ID == whatWasSent.CallID.ID))
+                //{
+                 //   throw new Exception();
+               // }
             }
             else
             {
