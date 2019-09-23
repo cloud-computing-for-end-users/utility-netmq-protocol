@@ -6,7 +6,7 @@ namespace custom_message_based_implementation
     {
         public Tesst()
         {
-            new Testing();
+            new Kenneth();
         }
     }
 }
