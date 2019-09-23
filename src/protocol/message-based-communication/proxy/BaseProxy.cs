@@ -83,5 +83,13 @@ namespace message_based_communication.proxy
                     callBack.Invoke(obj);
                 };
         }
+
+        protected Action<Response> WrapNoParamAction(Action action)
+        {
+            return response =>
+            {
+                action.Invoke();
+            };
+        }
     }
 }

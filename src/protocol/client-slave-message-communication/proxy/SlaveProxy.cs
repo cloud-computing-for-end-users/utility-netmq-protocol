@@ -20,16 +20,17 @@ namespace client_slave_message_communication.proxy
         }
 
         /// <summary>
-        /// gives back the port that the image producer can be contacted on
+        /// item 1 of the tuple is the width of the application
+        /// item 2 is the height of the application
         /// </summary>
         /// <param name="callBack"></param>
         /// <param name="pk"></param>
-        public void Handshake(Action<Port> callBack, PrimaryKey pk)
+        public void Handshake(Action<Tuple<int,int>> callBack, PrimaryKey pk)
         {
             var request = new Handshake() { arg1PrimaryKey = pk };
             SetStandardParameters(request);
 
-            SendMessage(WrapCallBack<Port>(callBack), request);
+            SendMessage(WrapCallBack<Tuple<int,int>>(callBack), request);
         }
         public void GetImageProducerConnectionInformation(Action<Port> callBack)
         {
@@ -55,13 +56,7 @@ namespace client_slave_message_communication.proxy
         }
 
 
-        private Action<Response> WrapNoParamAction(Action action)
-        {
-            return response =>
-            {
-                action.Invoke();
-            };
-        }
+
 
 
 

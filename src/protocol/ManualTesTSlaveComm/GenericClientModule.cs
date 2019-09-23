@@ -25,7 +25,7 @@ namespace ManualTesTSlaveComm
 
         public void ClickLeft(RelativeScreenLocation screenLocation)
         {
-            new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack, new ClickLeftAction() { arg1ScreenLocation = screenLocation });
+            new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack, new ClickLeftAction());
 
         }
 

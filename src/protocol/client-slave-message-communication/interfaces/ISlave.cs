@@ -12,7 +12,14 @@ namespace client_slave_message_communication.interfaces
     {
         void DoKeyboardAction(BaseKeyboardAction action);
         void DoMouseAction(BaseMouseAction action);
-        void Handshake(PrimaryKey pk);
+
+        /// <summary>
+        /// returns the width of the application as item 1
+        /// returns the height of the application as item 2
+        /// </summary>
+        /// <param name="pk"></param>
+        /// <returns></returns>
+        Tuple<int,int> Handshake(PrimaryKey pk);
         Port GetImageProducerConnInfo();
 
     }

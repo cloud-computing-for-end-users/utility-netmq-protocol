@@ -6,13 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="custom-message-based-implementation">
-      <HintPath>..\custom-message-based-implementation\bin\Debug\netcoreapp2.2\custom-message-based-implementation.dll</HintPath>
-    </Reference>
+    <PackageReference Include="custom-message-based-implementation" Version="1.0.0-CI-*" />
+    <PackageReference Include="message-based-communication" Version="1.0.0-CI-*" />
   </ItemGroup>
 
 </Project>
