@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="message-based-communication" Version="1.0.0-CI-*" />
+    <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
   </ItemGroup>
 
 </Project>
