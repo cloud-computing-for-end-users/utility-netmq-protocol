@@ -14,6 +14,8 @@ namespace client_slave_message_communication.model.mouse_action
         {
             MouseMove,
             ClickLeft,
+            LeftDown,
+            LeftUp,
             ClickRight,
             ScrollDown,
             ScrollUp,
