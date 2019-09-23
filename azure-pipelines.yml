@@ -59,7 +59,14 @@ steps:
     publishVstsFeed: '1f2eafee-a091-46b5-83a5-d2d8542cb765'
 
 #################POSSIBLY NEED A CLEAN CACHE############
-
+- task: DotNetCoreCLI@2
+  displayName: .NET Core Restore
+  inputs:
+    command: 'restore'
+    projects: '$(solution)'
+    feedsToUse: 'config'
+    nugetConfigPath: './NuGet.Config'
+##########testing
 - task: DotNetCoreCLI@2
   displayName: .NET Core Build, custom-message-based-implementation
   inputs:

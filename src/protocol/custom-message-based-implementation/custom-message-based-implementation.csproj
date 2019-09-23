@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="message-based-communication" Version="1.0.0-CI-20190923-092545" />
+    <PackageReference Include="message-based-communication" Version="1.0.0-CI-*" />
   </ItemGroup>
 
 </Project>
