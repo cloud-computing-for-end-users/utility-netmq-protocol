@@ -33,7 +33,7 @@ steps:
   displayName: .NET Core Build
   inputs:
     command: build
-    projects: '$(solution)'
+    projects: '**/message-based-communication.csproj'
     arguments: '--configuration $(buildConfiguration) --no-restore'
 
 
@@ -60,34 +60,32 @@ steps:
 
 #################POSSIBLY NEED A CLEAN CACHE############
 
-
+- task: DotNetCoreCLI@2
+  displayName: .NET Core Build, custom-message-based-implementation
+  inputs:
+    command: build
+    projects: '**/custom-message-based-implementation.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+- task: DotNetCoreCLI@2
+  displayName: .NET Core Build, client-slave-message-communication
+  inputs:
+    command: build
+    projects: '**/client-slave-message-communication.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 ## building of the custom-message-based-implementation & 
 ## client-slave-communication must be done after the "message-based-communication" have been pushed to git
-- task: DotNetCoreCLI@2
-  displayName: .NET Core NuGet Pack
-  inputs:
-    command: 'pack'
-    feedsToUse: 'config'
-    nugetConfigPath: './NuGet.Config'
-    packagesToPack: '**/protocol.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-
-- task: DotNetCoreCLI@2
-  displayName: .NET Core NuGet Pack
-  inputs:
-    command: 'pack'
-    feedsToUse: 'config'
-    nugetConfigPath: './NuGet.Config'
-    packagesToPack: '**/custom-message-based-implementation.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0' 
+#- task: DotNetCoreCLI@2
+#  displayName: .NET Core NuGet Pack
+#  inputs:
+#    command: 'pack'
+#    feedsToUse: 'config'
+#    nugetConfigPath: './NuGet.Config'
+#    packagesToPack: '**/protocol.csproj'
+#    nobuild: true
+#    versioningScheme: 'byPrereleaseNumber'
+#    majorVersion: '1'
+#    minorVersion: '0'
+#    patchVersion: '0'
 
 - task: DotNetCoreCLI@2
   displayName: .NET Core NuGet Pack, packing custom-message-based-implementation
@@ -103,7 +101,7 @@ steps:
     patchVersion: '0' 
 
 - task: DotNetCoreCLI@2
-  displayName: .NET Core NuGet Pack, packing 
+  displayName: .NET Core NuGet Pack, packing client-slave-message-communication
   inputs:
     command: 'pack'
     feedsToUse: 'config'
@@ -117,9 +115,17 @@ steps:
 
 #publishing the two newly build nuget packages
 - task: DotNetCoreCLI@2
-  displayName: .NET Core NuGet Push, message-based-communication
+  displayName: .NET Core NuGet Push, custom-message-based-implementation
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/custom-message-based-implementation*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '1f2eafee-a091-46b5-83a5-d2d8542cb765'
+
+- task: DotNetCoreCLI@2
+  displayName: .NET Core NuGet Push, client-slave-message-communication
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/client-slave-message-communication*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '1f2eafee-a091-46b5-83a5-d2d8542cb765'
