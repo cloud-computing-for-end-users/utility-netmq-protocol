@@ -60,7 +60,18 @@ steps:
 
 #################POSSIBLY NEED A CLEAN CACHE############
 
-
+- task: DotNetCoreCLI@2
+  displayName: .NET Core Build, custom-message-based-implementation
+  inputs:
+    command: build
+    projects: '**/custom-message-based-implementation.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+- task: DotNetCoreCLI@2
+  displayName: .NET Core Build, client-slave-message-communication
+  inputs:
+    command: build
+    projects: '**/client-slave-message-communication.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 ## building of the custom-message-based-implementation & 
 ## client-slave-communication must be done after the "message-based-communication" have been pushed to git
 #- task: DotNetCoreCLI@2
