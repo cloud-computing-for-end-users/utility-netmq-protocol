@@ -33,7 +33,7 @@ steps:
   displayName: .NET Core Build
   inputs:
     command: build
-    projects: '$(solution)'
+    projects: '**/message-based-communication.csproj'
     arguments: '--configuration $(buildConfiguration) --no-restore'
 
 
