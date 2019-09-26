@@ -5,6 +5,7 @@ using message_based_communication.setup;
 using NetMQ;
 using NetMQ.Sockets;
 using System;
+using System.Net;
 
 namespace message_based_communication.module
 {
@@ -25,6 +26,17 @@ namespace message_based_communication.module
         {
             this.proxyHelper = new ProxyHelper();
             this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, forSelf, this, customEncoding);
+        }
+
+        public string GetIP()
+        {
+            int indexForIPV4 = 1;
+
+            return Dns.GetHostAddresses(Dns.GetHostName())[indexForIPV4].ToString() ;
+        }
+        public int GetDefaultPort()
+        {
+            return 47845;
         }
 
     }
