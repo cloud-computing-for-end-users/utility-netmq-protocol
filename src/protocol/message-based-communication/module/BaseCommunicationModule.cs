@@ -28,16 +28,14 @@ namespace message_based_communication.module
             this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, forSelf, this, customEncoding);
         }
 
-        public string GetIP()
+        public static string GetIP()
         {
             int indexForIPV4 = 1;
-
             return Dns.GetHostAddresses(Dns.GetHostName())[indexForIPV4].ToString() ;
         }
-        public int GetDefaultPort()
+        public static int GetDefaultPort()
         {
             return 47845;
         }
-
     }
 }
