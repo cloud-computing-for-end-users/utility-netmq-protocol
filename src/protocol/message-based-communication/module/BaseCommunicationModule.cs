@@ -28,10 +28,12 @@ namespace message_based_communication.module
             this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, forSelf, this, customEncoding);
         }
 
+        [Obsolete] // is unreliable and therefore not to be used
         public static string GetIP()
         {
             int indexForIPV4 = 1;
-            return Dns.GetHostAddresses(Dns.GetHostName())[indexForIPV4].ToString() ;
+            var ips =  Dns.GetHostAddresses(Dns.GetHostName());
+            return ips[indexForIPV4].ToString();
         }
         public static int GetDefaultPort()
         {

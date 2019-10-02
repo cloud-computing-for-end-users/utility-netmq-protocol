@@ -8,6 +8,6 @@ namespace client_slave_message_communication.model.mouse_action
     {
         public RelativeScreenLocation RelativeScreenLocation { get; set; }
 
-        public override MouseAction Action => MouseAction.MouseMove;
+        public override string Action => MouseAction.MouseMove.ToString();
     }
 }
