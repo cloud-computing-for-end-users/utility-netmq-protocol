@@ -4,8 +4,8 @@
     {
         /// <summary>
         /// Bi-directional scroll wrapper.
-        /// Scrolling down (moving down) is a positive value.
-        /// Scrolling up (moving up) is a negative value.
+        /// Scrolling down or to the right (moving down or to the right) is a positive value.
+        /// Scrolling up or to the left (moving up or to the left) is a negative value.
         /// </summary>
         public double Amount { get; set; }
     }
