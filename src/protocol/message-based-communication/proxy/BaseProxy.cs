@@ -88,7 +88,7 @@ namespace message_based_communication.proxy
         {
             return response =>
             {
-                action.Invoke();
+                action?.Invoke();
             };
         }
     }
