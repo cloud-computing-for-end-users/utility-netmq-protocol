@@ -52,10 +52,16 @@ namespace client_slave_message_communication.proxy
         /// </summary>
         /// <param name="callBack"></param>
         /// <param name="action"></param>
-        [Obsolete] // nolonger supported
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
-            throw new NotImplementedException("The DoMouseMove action is no longer supported");
+            if(action is MouseMoveAction)
+            {
+                throw new NotImplementedException("The DoMouseMove action is no longer supported");
+            }
+            var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
+            SetStandardParameters(request);
+
+            SendMessage(WrapNoParamAction(callBack), request);
         }
 
         private ModuleType moduleType = new ModuleType() { TypeID = custom_message_based_implementation.consts.ModuleTypeConst.MODULE_TYPE_SLAVE };
