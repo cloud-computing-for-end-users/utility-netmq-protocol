@@ -10,16 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using client_slave_message_communication.proxy.helper_proxy;
 
 namespace client_slave_message_communication.proxy
 {
     public class SlaveProxy : BaseProxy
     {
-        private HelperProxyMouseControl mouseHelper;
         public SlaveProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule) : base(proxyHelper, baseCommunicationModule)
         {
-            this.mouseHelper = new HelperProxyMouseControl();
         }
 
         /// <summary>
@@ -55,20 +52,11 @@ namespace client_slave_message_communication.proxy
         /// </summary>
         /// <param name="callBack"></param>
         /// <param name="action"></param>
+        [Obsolete] // nolonger supported
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
-            //var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
-            //SetStandardParameters(request);
-
-            //SendMessage(WrapNoParamAction(callBack), request);
-            mouseHelper.QueueMouseCommand(action);
-
+            throw new NotImplementedException("The DoMouseMove action is no longer supported");
         }
-
-
-
-
-
 
         private ModuleType moduleType = new ModuleType() { TypeID = custom_message_based_implementation.consts.ModuleTypeConst.MODULE_TYPE_SLAVE };
         protected override void SetStandardParameters(BaseRequest baseRequest)

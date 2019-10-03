@@ -9,5 +9,7 @@ namespace client_slave_message_communication.model.mouse_action
         //public RelativeScreenLocation arg1ScreenLocation { get; set; }
 
         public override string Action => MouseAction.LeftUp.ToString();
+        public RelativeScreenLocation RelativeScreenLocation { get; set; }
+
     }
 }
