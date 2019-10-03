@@ -10,13 +10,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using client_slave_message_communication.proxy.helper_proxy;
 
 namespace client_slave_message_communication.proxy
 {
     public class SlaveProxy : BaseProxy
     {
+        private HelperProxyMouseControl mouseHelper;
         public SlaveProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule) : base(proxyHelper, baseCommunicationModule)
         {
+            this.mouseHelper = new HelperProxyMouseControl();
         }
 
         /// <summary>
@@ -47,12 +50,19 @@ namespace client_slave_message_communication.proxy
             SendMessage(WrapNoParamAction(callBack), request);
         }
 
+        /// <summary>
+        /// the callback for this method will never be invoked
+        /// </summary>
+        /// <param name="callBack"></param>
+        /// <param name="action"></param>
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
-            var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
-            SetStandardParameters(request);
+            //var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
+            //SetStandardParameters(request);
 
-            SendMessage(WrapNoParamAction(callBack), request);
+            //SendMessage(WrapNoParamAction(callBack), request);
+            mouseHelper.QueueMouseCommand(action);
+
         }
 
 
