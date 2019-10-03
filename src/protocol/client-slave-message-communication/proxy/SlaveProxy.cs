@@ -52,7 +52,6 @@ namespace client_slave_message_communication.proxy
         /// </summary>
         /// <param name="callBack"></param>
         /// <param name="action"></param>
-        [Obsolete] // nolonger supported
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
             throw new NotImplementedException("The DoMouseMove action is no longer supported");
