@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace client_slave_message_communication.model.mouse_action
+﻿namespace client_slave_message_communication.model.mouse_action
 {
 
     /// <summary>
@@ -12,15 +8,10 @@ namespace client_slave_message_communication.model.mouse_action
     {
         public enum MouseAction
         {
-            MouseMove,
-            ClickLeft,
             LeftDown,
             LeftUp,
-            ClickRight,
-            ScrollDown, // todo remove, merged to Scroll
-            ScrollUp, // todo remove, merged to Scroll
-            Scroll,
-            ClickMouseWheel
+            RightDown,
+            RightUp
         }
 
         /// <summary>

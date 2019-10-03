@@ -1,8 +1,8 @@
 ﻿namespace client_slave_message_communication.model.mouse_action
 {
-    public class LeftMouseUpAction : BaseMouseAction
+    public class RightMouseDownAction : BaseMouseAction
     {
-        public override string Action => MouseAction.LeftUp.ToString();
+        public override string Action => MouseAction.RightDown.ToString();
         public RelativeScreenLocation RelativeScreenLocation { get; set; }
     }
 }

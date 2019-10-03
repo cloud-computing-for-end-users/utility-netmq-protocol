@@ -54,10 +54,6 @@ namespace client_slave_message_communication.proxy
         /// <param name="action"></param>
         public void DoMouseAction(Action callBack, BaseMouseAction action)
         {
-            if(action is MouseMoveAction)
-            {
-                throw new NotImplementedException("The DoMouseMove action is no longer supported");
-            }
             var request = new DoMouseAction<BaseMouseAction>() { arg1MouseAction = action };
             SetStandardParameters(request);
 
