@@ -18,10 +18,6 @@ namespace client_slave_message_communication.encoding
                 {
                     return TryDecodeJson<DoMouseAction<ClickLeftAction>>(jsonString);
                 }
-                else if (BaseMouseAction.MouseAction.MouseMove.ToString().Equals(DoMouseAction.arg1MouseAction.Action))
-                {
-                    return TryDecodeJson<DoMouseAction<MouseMoveAction>>(jsonString);
-                }
                 else if (BaseMouseAction.MouseAction.LeftDown.ToString().Equals(DoMouseAction.arg1MouseAction.Action))
                 {
                     return TryDecodeJson<DoMouseAction<LeftMouseDownAction>>(jsonString);
