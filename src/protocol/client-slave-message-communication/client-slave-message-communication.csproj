@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog" Version="4.6.7" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\custom-message-based-implementation\custom-message-based-implementation.csproj" />
     <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
   </ItemGroup>
