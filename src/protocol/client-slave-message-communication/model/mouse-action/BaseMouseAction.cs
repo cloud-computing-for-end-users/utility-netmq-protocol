@@ -17,6 +17,8 @@ namespace client_slave_message_communication.model.mouse_action
             LeftDown,
             LeftUp,
             ClickRight,
+            RightDown,
+            RightUp,
             ScrollDown, // todo remove, merged to Scroll
             ScrollUp, // todo remove, merged to Scroll
             Scroll,
