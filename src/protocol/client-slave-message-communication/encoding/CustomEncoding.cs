@@ -21,11 +21,11 @@ namespace client_slave_message_communication.encoding
                 {
                     return TryDecodeJson<DoMouseAction<LeftMouseUpAction>>(jsonString);
                 }
-                else if (BaseMouseAction.MouseAction.RightDown.ToString().Equals(DoMouseAction.arg1MouseAction.Action))
+                else if (BaseMouseAction.MouseAction.RightDown.ToString().Equals(doMouseAction.arg1MouseAction.Action))
                 {
                     return TryDecodeJson<DoMouseAction<RightMouseDownAction>>(jsonString);
                 }
-                else if (BaseMouseAction.MouseAction.RightUp.ToString().Equals(DoMouseAction.arg1MouseAction.Action))
+                else if (BaseMouseAction.MouseAction.RightUp.ToString().Equals(doMouseAction.arg1MouseAction.Action))
                 {
                     return TryDecodeJson<DoMouseAction<RightMouseUpAction>>(jsonString);
                 }

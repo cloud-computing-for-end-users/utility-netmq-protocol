@@ -20,13 +20,15 @@ namespace ManualTesTSlaveComm
 
         public void MoveMouse(RelativeScreenLocation screenLocation)
         {
-            new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack,new MouseMoveAction() { RelativeScreenLocation = screenLocation });
+            //new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack,
+                //new MouseMoveAction() {RelativeScreenLocation = screenLocation});
+            throw new NotImplementedException();
         }
 
         public void ClickLeft(RelativeScreenLocation screenLocation)
         {
-            new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack, new ClickLeftAction());
-
+            //new SlaveProxy(base.proxyHelper, this).DoMouseAction(CallBack, new ClickLeftAction());
+            throw new NotImplementedException();
         }
 
         private void CallBack()
