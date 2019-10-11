@@ -7,9 +7,6 @@ using message_based_communication.model;
 using message_based_communication.module;
 using message_based_communication.proxy;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace client_slave_message_communication.proxy
 {
