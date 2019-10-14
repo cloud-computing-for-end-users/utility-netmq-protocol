@@ -28,13 +28,20 @@ namespace message_based_communication.module
             this.proxyHelper.Setup(baseRouterModule,baseRouterRegistrationPort,moduleType, forSelf, this, customEncoding);
         }
 
-        [Obsolete] // is unreliable and therefore not to be used
+        //[Obsolete] // is unreliable and therefore not to be used
+        /// <summary>
+        /// Should only be used whn the application is run within docker
+        /// </summary>
+        /// <returns></returns>
         public static string GetIP()
         {
-            int indexForIPV4 = 1;
+            int indexForIPV4 = 0;
             var ips =  Dns.GetHostAddresses(Dns.GetHostName());
             return ips[indexForIPV4].ToString();
         }
+
+
+
         public static int GetDefaultPort()
         {
             return 47845;

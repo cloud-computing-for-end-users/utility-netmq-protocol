@@ -9,6 +9,9 @@ namespace custom_message_based_implementation.model
     {
         public PrimaryKey OwnerPrimaryKey { get; set; }
         public SlaveID SlaveID { get; set; }
+        public Port RegistrationPort { get; set; }
+        public Port ConnectToRecieveImagesPort { get; set; }
+
 
 
     }

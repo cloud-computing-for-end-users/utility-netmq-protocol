@@ -8,7 +8,7 @@ namespace custom_message_based_implementation.interfaces
 {
     public interface ISlaveOwnerServermodule
     {
-        Tuple<SlaveConnection,Port> GetSlave(ApplicationInfo appInfo, PrimaryKey primaryKey);
+        SlaveConnection GetSlave(ApplicationInfo appInfo, PrimaryKey primaryKey);
 
         List<ApplicationInfo> GetListOfRunnableApplications();
 

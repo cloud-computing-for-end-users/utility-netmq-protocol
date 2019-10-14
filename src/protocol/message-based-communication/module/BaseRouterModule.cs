@@ -14,7 +14,7 @@ namespace message_based_communication.module
     {
         abstract protected string MODULE_ID_PREFIXES { get; }
 
-        protected Dictionary<ModuleID, RequestSocket> moduleIdToProxyHelper = new Dictionary<ModuleID, RequestSocket>();
+        protected Dictionary<ModuleID, RequestSocket> moduleIdToRequestSocket = new Dictionary<ModuleID, RequestSocket>();
         protected Dictionary<ModuleType, List<RequestSocket>> moduleTypeToProxyHelper = new Dictionary<ModuleType, List<RequestSocket>>();
         Encoding customEncoder;
 
@@ -44,15 +44,17 @@ namespace message_based_communication.module
         protected override void SendResponse(Response response)
         {
             //var hash1 = response.TargetModuleID.GetHashCode();
-            //foreach(var k in this.moduleIdToProxyHelper.Keys)
+            //foreach(var k in this.moduleIdToRequestSocket.Keys)
             //{
             //    var hash2 = k.GetHashCode();
             //}
-            if (this.moduleIdToProxyHelper.ContainsKey(response.TargetModuleID))
+            if (this.moduleIdToRequestSocket.ContainsKey(response.TargetModuleID))
             {
 
-                var connection = this.moduleIdToProxyHelper[response.TargetModuleID];
-                connection.SendMultipartMessage(Encoding.EncodeResponse(response));
+                var connection = this.moduleIdToRequestSocket[response.TargetModuleID];
+                var encodedResponse = Encoding.EncodeResponse(response);
+                Console.WriteLine("Sending response: { " + encodedResponse + " }");
+                connection.SendMultipartMessage(encodedResponse);
 
                 var ack = connection.ReceiveMultipartMessage();
                 ProxyHelper.ValidateAckMessage(ack, response, this.customEncoder);
@@ -102,12 +104,12 @@ namespace message_based_communication.module
             NetMQMessage message = null;
             if (sendable is BaseRequest request)
             {
-                connection= this.moduleTypeToProxyHelper[request.TargetModuleType][moduleTypeToProxyHelper.Count > 1 ? 0 : Random.Next(moduleIdToProxyHelper.Count - 1)];
+                connection= this.moduleTypeToProxyHelper[request.TargetModuleType][moduleTypeToProxyHelper.Count > 1 ? 0 : Random.Next(moduleIdToRequestSocket.Count - 1)];
                 message = Encoding.EncodeRequest(request);
             }
             else if (sendable is Response response)
             {
-                connection = this.moduleIdToProxyHelper[response.TargetModuleID];
+                connection = this.moduleIdToRequestSocket[response.TargetModuleID];
                 message = Encoding.EncodeResponse(response);
             }
 
@@ -132,6 +134,8 @@ namespace message_based_communication.module
                     throw new Exception("got a null while trying to decode ");
                 }
 
+                Console.WriteLine("Recived request to register, with module type: " + decoded.ModuleType.TypeID + " and connection info: { IP: " + decoded.ConnInfo.IP.TheIP + "; PORT: " + decoded.ConnInfo.Port.ThePort + " }");
+
                 var moduleID = RegisterModule(decoded.ModuleType, decoded.ConnInfo);
                 var response = new RegisterModuleResponse()
                 {
@@ -151,10 +155,10 @@ namespace message_based_communication.module
             {
                 moduleID = new ModuleID() { ID = MODULE_ID_PREFIXES + new Random().Next() };
 
-            } while (moduleIdToProxyHelper.ContainsKey(moduleID));
+            } while (moduleIdToRequestSocket.ContainsKey(moduleID));
 
             var requestSocket = new RequestSocket("tcp://" + connectionInformation.IP.TheIP + ":" + connectionInformation.Port.ThePort);
-            moduleIdToProxyHelper.Add(moduleID, requestSocket);
+            moduleIdToRequestSocket.Add(moduleID, requestSocket);
 
             if (false == moduleTypeToProxyHelper.ContainsKey(moduleType)){
                 moduleTypeToProxyHelper.Add(moduleType, new List<RequestSocket>());

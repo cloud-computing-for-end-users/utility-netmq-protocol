@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NLog;
 
 namespace message_based_communication.proxy
 {
@@ -13,6 +14,9 @@ namespace message_based_communication.proxy
         protected ProxyHelper proxyHelper;
         protected BaseCommunicationModule baseCommunicationModule;
         protected Dictionary<string, Action<Response>> callIDToResponseHandler;
+
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
 
         public BaseProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule)
         {
@@ -66,6 +70,7 @@ namespace message_based_communication.proxy
             return
                 (response) =>
                 {
+                    Logger.Info("Attempting decode of payload: " + response.Payload.ThePayload);
                     if (response.Payload.ThePayload is JArray _jArray) // this is a "hack" because Newtonsoft can't deserialise to a list in the way the payload is made right now
                     {
                         response.Payload.ThePayload = _jArray.ToObject<T>();
