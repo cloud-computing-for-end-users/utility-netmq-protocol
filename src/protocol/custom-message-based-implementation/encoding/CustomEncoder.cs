@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using custom_message_based_implementation.custom_request.slave_owner_servermodule;
+﻿using custom_message_based_implementation.custom_request.slave_owner_servermodule;
 using message_based_communication.model;
 
 
@@ -10,16 +8,18 @@ namespace custom_message_based_implementation.encoding
     {
         protected override BaseRequest DecodeJsonToSpecificRequest(string specificMethodID, string jsonString)
         {
-            if (RequestGetSlave.METHOD_ID.Equals(specificMethodID))
+            switch (specificMethodID)
             {
-                return TryDecodeJson<RequestGetSlave>(jsonString);
-            }else if (RequestGetListOfRunningApplications.METHOD_ID.Equals(specificMethodID))
-            {
-                return TryDecodeJson<RequestGetListOfRunningApplications>(jsonString);
-            }
-            else
-            {
-                return null;
+                case RequestGetSlave.METHOD_ID:
+                    return TryDecodeJson<RequestGetSlave>(jsonString);
+                case RequestGetListOfRunningApplications.METHOD_ID:
+                    return TryDecodeJson<RequestGetListOfRunningApplications>(jsonString);
+                case RequestLogin.METHOD_ID:
+                    return TryDecodeJson<RequestLogin>(jsonString);
+                case RequestCreateAccount.METHOD_ID:
+                    return TryDecodeJson<RequestCreateAccount>(jsonString);
+                default:
+                    return null;
             }
         }
     }

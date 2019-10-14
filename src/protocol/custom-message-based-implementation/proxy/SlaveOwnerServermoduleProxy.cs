@@ -7,23 +7,19 @@ using message_based_communication.module;
 using message_based_communication.proxy;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace custom_message_based_implementation.proxy
 {
     public class SlaveOwnerServermoduleProxy : BaseProxy
     {
+        private readonly ModuleType moduleType = new ModuleType() { TypeID = ModuleTypeConst.MODULE_TYPE_SLAVE_OWNER };
 
-        public SlaveOwnerServermoduleProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule) : base(proxyHelper, baseCommunicationModule)
-        {
-        }
+        public SlaveOwnerServermoduleProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule) : base(proxyHelper, baseCommunicationModule) {}
 
         public void GetSlave(PrimaryKey arg1, ApplicationInfo arg2, Action<SlaveConnection> callBack)
         {
-            var request = new RequestGetSlave();
-            
-            request.Arg1PrimaryKey = arg1;
-            request.Arg2AppInfo = arg2;
+            var request = new RequestGetSlave {Arg1PrimaryKey = arg1, Arg2AppInfo = arg2};
+
             SetStandardParameters(request);
 
             base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request);
@@ -37,17 +33,9 @@ namespace custom_message_based_implementation.proxy
             base.SendMessage(WrapCallBack<List<ApplicationInfo>>(callBack), request);
         }
 
-
-
-
-
-        private readonly ModuleType moduleType = new ModuleType() { TypeID = ModuleTypeConst.MODULE_TYPE_SLAVE_OWNER };
         protected override void SetStandardParameters(BaseRequest baseRequest)
         {
             base.SetStandardParameters(baseRequest, moduleType);
         }
-
-
-
     }
 }
