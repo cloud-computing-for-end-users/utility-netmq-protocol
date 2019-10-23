@@ -5,8 +5,9 @@ using System.Text;
 
 namespace custom_message_based_implementation.model
 {
-    public class SlaveConnection : ConnectionInformation
+    public class SlaveConnection
     {
+        public ConnectionInformation ConnectionInformation { get; set; }
         public PrimaryKey OwnerPrimaryKey { get; set; }
         public SlaveID SlaveID { get; set; }
         public Port RegistrationPort { get; set; }

@@ -16,13 +16,13 @@ namespace custom_message_based_implementation.proxy
 
         public SlaveOwnerServermoduleProxy(ProxyHelper proxyHelper, BaseCommunicationModule baseCommunicationModule) : base(proxyHelper, baseCommunicationModule) {}
 
-        public void GetSlave(PrimaryKey arg1, ApplicationInfo arg2, Action<SlaveConnection> callBack)
+        public void GetSlave(PrimaryKey arg1, ApplicationInfo arg2, Action<Slave> callBack)
         {
             var request = new RequestGetSlave {Arg1PrimaryKey = arg1, Arg2AppInfo = arg2};
 
             SetStandardParameters(request);
 
-            base.SendMessage(WrapCallBack<SlaveConnection>(callBack), request);
+            base.SendMessage(WrapCallBack<Slave>(callBack), request);
         }
 
         public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)

@@ -7,9 +7,9 @@ namespace custom_message_based_implementation.interfaces
 {
     public interface ISlaveOwnerServermodule
     {
-        SlaveConnection GetSlave(ApplicationInfo appInfo, PrimaryKey primaryKey);
+        Slave GetSlave(ApplicationInfo appInfo, PrimaryKey primaryKey);
 
         List<ApplicationInfo> GetListOfRunnableApplications();
 
     }
-}
+}   
