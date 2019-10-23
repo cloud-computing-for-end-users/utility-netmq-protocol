@@ -13,6 +13,8 @@ namespace message_based_communication.connection
 {
     public class ProxyHelper
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// this is the module where requests are sent to
         /// </summary>
@@ -41,6 +43,7 @@ namespace message_based_communication.connection
         /// <param name="baseModule"></param>
         public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort,ModuleType moduleType,ConnectionInformation forSelf ,BaseCommunicationModule baseModule, Encoding customEncoding)
         {
+            Logger.Debug("Starting proxy helper setup with args: " + routerModule + "; " + baseRouterRegistrationPort + "; " + moduleType + "; " + forSelf + "; " + baseModule + "; " + customEncoding);
             //this.routerModule = routerModule;
             this.baseModule = baseModule;
             this.customEncoding = customEncoding;
