@@ -22,5 +22,8 @@ namespace client_slave_message_communication.interfaces
         Tuple<int,int> Handshake(PrimaryKey pk);
         Port GetImageProducerConnInfo();
 
+        void FetchRemoteFile(string fileName);
+        void SaveFilesAndTerminate();
+
     }
 }

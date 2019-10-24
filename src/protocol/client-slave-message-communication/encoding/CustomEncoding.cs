@@ -34,17 +34,25 @@ namespace client_slave_message_communication.encoding
                     throw new NotImplementedException();
                 }
             }
-            if (specificMethodID.Equals(MethodID.METHOD_ID_DO_KEYBOARD_ACTION))
+            else if (specificMethodID.Equals(MethodID.METHOD_ID_DO_KEYBOARD_ACTION))
             {
                 return TryDecodeJson<DoKeyboardAction>(jsonString);
             } 
-            if (specificMethodID.Equals(MethodID.METHOD_ID_GET_IMAGE_PRODUCER_CONN))
+            else if (specificMethodID.Equals(MethodID.METHOD_ID_GET_IMAGE_PRODUCER_CONN))
             {
                 return TryDecodeJson<GetImageProducerConnectionInfo>(jsonString);
             }
-            if (specificMethodID.Equals(MethodID.METHOD_ID_HANDSHAKE))
+            else if (specificMethodID.Equals(MethodID.METHOD_ID_HANDSHAKE))
             {
                 return TryDecodeJson<Handshake>(jsonString);
+            }
+            else if (specificMethodID.Equals(MethodID.METHOD_ID_FETCH_REMOTE_FILE))
+            {
+                return TryDecodeJson<FetchRemoteFile>(jsonString);
+            }
+            else if (specificMethodID.Equals(MethodID.METHOD_ID_SAVE_FILES_AND_TERMINATE))
+            {
+                return TryDecodeJson<SaveFilesAndTerminate>(jsonString);
             }
             throw new NotImplementedException();
         }

@@ -29,6 +29,7 @@ namespace client_slave_message_communication.proxy
 
             SendMessage(WrapCallBack<Tuple<int,int>>(callBack), request);
         }
+        [Obsolete("this information is not gained from the slave owner when calling the GetSlave method")]
         public void GetImageProducerConnectionInformation(Action<Port> callBack)
         {
             var request = new GetImageProducerConnectionInfo();
@@ -57,11 +58,31 @@ namespace client_slave_message_communication.proxy
             SendMessage(WrapNoParamAction(callBack), request);
         }
 
+        // tell the Slave to fetch a file from the file server
+        public void FetchRemoteFile(Action callBack, string fileName)
+        {
+            var request = new FetchRemoteFile() { FileName = fileName};
+            SetStandardParameters(request);
+
+            SendMessage(WrapNoParamAction(callBack), request);
+        }
+
+        // the slave will save files to file servermodule and then terminate
+        public void SaveFilesAndTerminate(Action callBack)
+        {
+            var request = new SaveFilesAndTerminate();
+            SetStandardParameters(request);
+
+            SendMessage(WrapNoParamAction(callBack), request);
+        }
+
+
         private ModuleType moduleType = new ModuleType() { TypeID = custom_message_based_implementation.consts.ModuleTypeConst.MODULE_TYPE_SLAVE };
         protected override void SetStandardParameters(BaseRequest baseRequest)
         {
             base.SetStandardParameters(baseRequest, moduleType);
         }
+
 
 
     }

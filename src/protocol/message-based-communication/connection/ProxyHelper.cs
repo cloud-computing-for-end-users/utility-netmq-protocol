@@ -48,9 +48,10 @@ namespace message_based_communication.connection
             this.baseModule = baseModule;
             this.customEncoding = customEncoding;
 
+            this.ModuleID = RegisterModule(baseModule.ModuleType, routerModule, baseRouterRegistrationPort, forSelf);
+
             this.outTraffic = new RequestSocket("tcp://" + routerModule.IP.TheIP + ":" + routerModule.Port.ThePort);
 
-            this.ModuleID = RegisterModule(baseModule.ModuleType, routerModule, baseRouterRegistrationPort, forSelf);
 
             var t = new Thread(() =>
             {
@@ -74,10 +75,14 @@ namespace message_based_communication.connection
             };
 
             var encodedReq = encoding.Encoding.EncodeRegisterModuleRequest(request);
+            Logger.Debug("Sending registration request to router : from proxy helper");
             reqSocker.SendMultipartMessage(encodedReq);
+
 
             //reciving response
             var encodedResponse = reqSocker.ReceiveMultipartMessage();
+            Logger.Debug("recived response to registration request : from proxy helper");
+
             var decodedResponse = encoding.Encoding.TryDecodeRegisterModuleResponse(encodedResponse);
 
 
