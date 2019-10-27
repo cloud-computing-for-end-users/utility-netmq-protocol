@@ -14,5 +14,6 @@
         public const string METHOD_FILE_GET_LIST_OF_FILES = "1-FSM_REQ_GET_LIST_OF_FILES";
         public const string METHOD_FILE_UPLOAD_FILE = "2-FSM_REQ_UPLOAD_FILE";
         public const string METHOD_FILE_DOWNLOAD_FILE = "3-FSM_REQ_DOWNLOAD_FILE";
+        public const string METHOD_FILE_RENAME_FILE = "4-FSM_REQ_RENAME_FILE";
     }
 }

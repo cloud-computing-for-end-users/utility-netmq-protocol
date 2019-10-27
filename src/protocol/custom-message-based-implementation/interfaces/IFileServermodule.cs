@@ -8,5 +8,6 @@ namespace custom_message_based_implementation.interfaces
         List<FileName> GetListOfFiles(PrimaryKey pk);
         void UploadFile(File file, PrimaryKey pk, bool overwrite);
         File DownloadFile(FileName fileName, PrimaryKey pk);
+        void RenameFile(FileName oldFileName, FileName newFileName, PrimaryKey pk);
     }
 }

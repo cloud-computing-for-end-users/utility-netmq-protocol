@@ -1,4 +1,5 @@
-﻿using custom_message_based_implementation.custom_request.slave_owner_servermodule;
+﻿using System;
+using custom_message_based_implementation.custom_request.slave_owner_servermodule;
 using message_based_communication.model;
 
 
@@ -18,8 +19,16 @@ namespace custom_message_based_implementation.encoding
                     return TryDecodeJson<RequestLogin>(jsonString);
                 case RequestCreateAccount.METHOD_ID:
                     return TryDecodeJson<RequestCreateAccount>(jsonString);
+                case RequestDownloadFile.METHOD_ID:
+                    return TryDecodeJson<RequestDownloadFile>(jsonString);
+                case RequestGetListOfFiles.METHOD_ID:
+                    return TryDecodeJson<RequestGetListOfFiles>(jsonString);
+                case RequestRenameFile.METHOD_ID:
+                    return TryDecodeJson<RequestRenameFile>(jsonString);
+                case RequestUploadFile.METHOD_ID:
+                    return TryDecodeJson<RequestUploadFile>(jsonString);
                 default:
-                    return null;
+                    throw new NotImplementedException();
             }
         }
     }

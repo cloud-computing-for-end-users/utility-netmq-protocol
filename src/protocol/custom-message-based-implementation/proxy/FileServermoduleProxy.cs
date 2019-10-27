@@ -46,5 +46,14 @@ namespace custom_message_based_implementation.proxy
 
             base.SendMessage(WrapCallBack<File>(callBack), request);
         }
+
+        public void RenameFile(FileName oldFileName, FileName newFileName, PrimaryKey pk, Action callBack)
+        {
+            var request = new RequestRenameFile { PrimaryKey = pk, OldFileName = oldFileName, NewFileName = newFileName};
+
+            SetStandardParameters(request);
+
+            base.SendMessage(WrapNoParamAction(callBack), request);
+        }
     }
 }
