@@ -104,7 +104,7 @@ namespace message_based_communication.module
             NetMQMessage message = null;
             if (sendable is BaseRequest request)
             {
-                connection= this.moduleTypeToProxyHelper[request.TargetModuleType][moduleTypeToProxyHelper.Count > 1 ? 0 : Random.Next(moduleIdToRequestSocket.Count - 1)];
+                connection= this.moduleTypeToProxyHelper[request.TargetModuleType][moduleTypeToProxyHelper[request.TargetModuleType].Count > 1 ? Random.Next(moduleIdToRequestSocket.Count - 1) : 0];
                 message = Encoding.EncodeRequest(request);
             }
             else if (sendable is Response response)

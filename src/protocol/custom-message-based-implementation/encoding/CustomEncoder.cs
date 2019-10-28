@@ -18,6 +18,12 @@ namespace custom_message_based_implementation.encoding
                     return TryDecodeJson<RequestLogin>(jsonString);
                 case RequestCreateAccount.METHOD_ID:
                     return TryDecodeJson<RequestCreateAccount>(jsonString);
+                case RequestUploadFile.METHOD_ID:
+                    return TryDecodeJson<RequestUploadFile>(jsonString);
+                case RequestDownloadFile.METHOD_ID:
+                    return TryDecodeJson<RequestDownloadFile>(jsonString);
+                case RequestGetListOfFiles.METHOD_ID:
+                    return TryDecodeJson<RequestGetListOfFiles>(jsonString);
                 default:
                     return null;
             }

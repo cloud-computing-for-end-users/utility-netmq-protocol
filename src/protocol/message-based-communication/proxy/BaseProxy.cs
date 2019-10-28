@@ -70,11 +70,12 @@ namespace message_based_communication.proxy
             return
                 (response) =>
                 {
+                    var thePayload = response.Payload.ThePayload;
                     Logger.Info("Attempting decode of payload: " + response.Payload.ThePayload);
-                    if (response.Payload.ThePayload is JArray _jArray) // this is a "hack" because Newtonsoft can't deserialise to a list in the way the payload is made right now
+                    if (thePayload is JArray _jArray) // this is a "hack" because Newtonsoft can't deserialise to a list in the way the payload is made right now
                     {
                         response.Payload.ThePayload = _jArray.ToObject<T>();
-                    }else if(response.Payload.ThePayload is JObject jObject)
+                    }else if(thePayload is JObject jObject)
                     {
                         response.Payload.ThePayload = jObject.ToObject<T>();
                     }
