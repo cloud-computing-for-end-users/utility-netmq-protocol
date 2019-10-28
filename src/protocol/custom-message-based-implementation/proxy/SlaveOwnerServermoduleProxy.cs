@@ -25,12 +25,15 @@ namespace custom_message_based_implementation.proxy
             base.SendMessage(WrapCallBack<Slave>(callBack), request);
         }
 
-        public void GetListOfRunningApplications(Action<List<ApplicationInfo>> callBack)
+        public void GetListOfRunningApplications(
+            Action<List<ApplicationInfo>> callBack
+            )
         {
             var request = new RequestGetListOfRunningApplications();
             this.SetStandardParameters(request);
 
-            base.SendMessage(WrapCallBack<List<ApplicationInfo>>(callBack), request);
+            var wrapped = WrapCallBack<List<ApplicationInfo>>(callBack);
+            base.SendMessage(wrapped, request);
         }
 
         protected override void SetStandardParameters(BaseRequest baseRequest)
