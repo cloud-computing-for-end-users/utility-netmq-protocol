@@ -181,7 +181,12 @@ namespace message_based_communication.connection
                         && _request.TargetModuleType.TypeID.Equals(this.baseModule.ModuleType.TypeID)
                         )
                     {
-                        _baseServerModule.HandleRequest(_request);
+                        // start a new thread only for this
+                        var thread = new Thread(
+                                () => _baseServerModule.HandleRequest(_request)
+                            );
+                        thread.IsBackground = true;
+                        thread.Start();
                     }
                     else if (baseModule is BaseRouterModule _router)
                     {
