@@ -22,11 +22,15 @@ namespace custom_message_based_implementation.proxy
 
         public void GetListOfFiles(PrimaryKey pk, Action<List<FileName>> callBack)
         {
-            var request = new RequestGetListOfFiles { PrimaryKey = pk };
+            var request = new RequestGetListOfFiles();
+
+            request.PrimaryKey = pk;
 
             SetStandardParameters(request);
 
-            base.SendMessage(WrapCallBack<List<FileName>>(callBack), request);
+            var wrappedCallback = WrapCallBack<List<FileName>>(callBack);
+
+            base.SendMessage(wrappedCallback, request);
         }
 
         public void UploadFile(File file, PrimaryKey pk, bool overwrite, Action callBack)
