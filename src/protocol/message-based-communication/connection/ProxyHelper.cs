@@ -8,6 +8,7 @@ using NetMQ.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using NLog.Fluent;
 
 namespace message_based_communication.connection
 {
@@ -41,7 +42,7 @@ namespace message_based_communication.connection
         /// </summary>
         /// <param name="routerModule"></param>
         /// <param name="baseModule"></param>
-        public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort,ModuleType moduleType,ConnectionInformation forSelf ,BaseCommunicationModule baseModule, Encoding customEncoding)
+        public void Setup(ConnectionInformation routerModule, Port baseRouterRegistrationPort, ModuleType moduleType, ConnectionInformation forSelf, BaseCommunicationModule baseModule, Encoding customEncoding)
         {
             Logger.Debug("Starting proxy helper setup with args: " + routerModule + "; " + baseRouterRegistrationPort + "; " + moduleType + "; " + forSelf + "; " + baseModule + "; " + customEncoding);
             //this.routerModule = routerModule;
@@ -55,8 +56,14 @@ namespace message_based_communication.connection
 
             var t = new Thread(() =>
             {
-
-                ReciveSendable(customEncoding, forSelf.Port);
+                try
+                {
+                    ReciveSendable(customEncoding, forSelf.Port);
+                }
+                catch (Exception e)
+                {
+                    Logger.Debug(e);
+                }
 
             });
             t.IsBackground = true;
@@ -139,8 +146,8 @@ namespace message_based_communication.connection
             {
                 //if (false == (_ack.CallID.ID == whatWasSent.CallID.ID))
                 //{
-                 //   throw new Exception();
-               // }
+                //   throw new Exception();
+                // }
             }
             else
             {
@@ -160,59 +167,75 @@ namespace message_based_communication.connection
 
             while (true)
             {
-                //recive message
-                var message = inTraffic.ReceiveMultipartMessage();
-                var sendable = customEncoding.DecodeIntoSendable(message);
-
-                //send message ack
-                inTraffic.SendMultipartMessage(Encoding.EncodeAckRecivedSendable(new AcknowledgeRecivedSendable()
+                lock (inTraffic)
                 {
-                    CallID = sendable.CallID,
-                    SenderModuleID = this.ModuleID, //TODO this whole ack think is currently kinda wrong or atleast it is just the next node in line that will send back an ack
-                    TargetModuleID = sendable.SenderModuleID
-                }));
+
+                    //recive message
+                    var message = inTraffic.ReceiveMultipartMessage();
+                    var sendable = customEncoding.DecodeIntoSendable(message);
+
+                    //send message ack
+                    inTraffic.SendMultipartMessage(Encoding.EncodeAckRecivedSendable(new AcknowledgeRecivedSendable()
+                    {
+                        CallID = sendable.CallID,
+                        SenderModuleID = this.ModuleID, //TODO this whole ack think is currently kinda wrong or atleast it is just the next node in line that will send back an ack
+                        TargetModuleID = sendable.SenderModuleID
+                    }));
 
 
 
-                if (sendable is BaseRequest _request)
-                {
-                    //this is a request
-                    if (baseModule is BaseServerModule _baseServerModule
-                        && _request.TargetModuleType.TypeID.Equals(this.baseModule.ModuleType.TypeID)
-                        )
+                    if (sendable is BaseRequest _request)
                     {
-                        // start a new thread only for this
-                        var thread = new Thread(
-                                () => _baseServerModule.HandleRequest(_request)
-                            );
-                        thread.IsBackground = true;
-                        thread.Start();
-                    }
-                    else if (baseModule is BaseRouterModule _router)
-                    {
-                        _router.HandleSendable(sendable);
-                    }
-                }
-                else if (sendable is Response response)
-                {
-                    if (baseModule is BaseRouterModule _router
-                        && response.TargetModuleID.ID != ModuleID.ID
-                        )
-                    {
-                        _router.HandleSendable(response);
-                    }
-                    else
-                    {
-                        lock (this.callIDToReponseHandler)
+                        //this is a request
+                        if (baseModule is BaseServerModule _baseServerModule
+                            && _request.TargetModuleType.TypeID.Equals(this.baseModule.ModuleType.TypeID)
+                            )
                         {
-                            if (callIDToReponseHandler.ContainsKey(response.CallID.ID))
-                            {
-                                //this is a response made to a request
-                                callIDToReponseHandler[response.CallID.ID].HandleResponse(response);
-                            }
+                            // start a new thread only for this
+                            var thread = new Thread(() =>
+                                {
+
+                                    try
+                                    {
+                                        _baseServerModule.HandleRequest(_request);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Got exception while in HandleRequest, look at log for more information.");
+                                        Logger.Debug("Got exception while handling request: {methodID: " + _request.SpecificMethodID + "; TargetModuleType: " + _request.TargetModuleType + "}");
+                                        Logger.Debug(e);
+                                    }
+                                }
+                            );
+                            thread.IsBackground = true;
+                            thread.Start();
+                        }
+                        else if (baseModule is BaseRouterModule _router)
+                        {
+                            _router.HandleSendable(sendable);
                         }
                     }
+                    else if (sendable is Response response)
+                    {
+                        if (baseModule is BaseRouterModule _router
+                            && response.TargetModuleID.ID != ModuleID.ID
+                            )
+                        {
+                            _router.HandleSendable(response);
+                        }
+                        else
+                        {
+                            lock (this.callIDToReponseHandler)
+                            {
+                                if (callIDToReponseHandler.ContainsKey(response.CallID.ID))
+                                {
+                                    //this is a response made to a request
+                                    callIDToReponseHandler[response.CallID.ID].HandleResponse(response);
+                                }
+                            }
+                        }
 
+                    }
                 }
             }
         }

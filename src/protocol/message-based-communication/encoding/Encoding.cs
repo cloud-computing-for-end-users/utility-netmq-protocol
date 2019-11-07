@@ -72,7 +72,7 @@ namespace message_based_communication.encoding
 
 
 
-        private static string EncodeToJson(object obj)
+        public static string EncodeToJson(object obj)
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
         }
