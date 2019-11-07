@@ -55,5 +55,14 @@ namespace custom_message_based_implementation.proxy
 
             base.SendMessage(WrapNoParamAction(callBack), request);
         }
+
+        public void RemoveFile(FileName fileName, PrimaryKey pk, Action callBack)
+        {
+            var request = new RequestRemoveFile { PrimaryKey = pk, FileName = fileName };
+
+            SetStandardParameters(request);
+
+            base.SendMessage(WrapNoParamAction(callBack), request);
+        }
     }
 }

@@ -27,6 +27,8 @@ namespace custom_message_based_implementation.encoding
                     return TryDecodeJson<RequestRenameFile>(jsonString);
                 case RequestUploadFile.METHOD_ID:
                     return TryDecodeJson<RequestUploadFile>(jsonString);
+                case RequestRemoveFile.METHOD_ID:
+                    return TryDecodeJson<RequestRemoveFile>(jsonString);
                 default:
                     throw new NotImplementedException();
             }
