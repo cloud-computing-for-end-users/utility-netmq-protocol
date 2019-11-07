@@ -15,5 +15,6 @@
         public const string METHOD_FILE_UPLOAD_FILE = "2-FSM_REQ_UPLOAD_FILE";
         public const string METHOD_FILE_DOWNLOAD_FILE = "3-FSM_REQ_DOWNLOAD_FILE";
         public const string METHOD_FILE_RENAME_FILE = "4-FSM_REQ_RENAME_FILE";
+        public const string METHOD_FILE_REMOVE_FILE = "5-FSM_REQ_REMOVE_FILE";
     }
 }
