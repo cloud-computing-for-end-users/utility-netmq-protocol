@@ -1,5 +1,4 @@
 ﻿using System;
-using client_slave_message_communication.model.keyboard_action;
 using message_based_communication.model;
 
 namespace client_slave_message_communication.custom_requests

@@ -1,5 +1,4 @@
-﻿using client_slave_message_communication.model.keyboard_action;
-using client_slave_message_communication.model.mouse_action;
+﻿using client_slave_message_communication.model.mouse_action;
 using custom_message_based_implementation.model;
 using message_based_communication.model;
 using System;
@@ -10,7 +9,7 @@ namespace client_slave_message_communication.interfaces
 {
     public interface ISlave
     {
-        void DoKeyboardAction(BaseKeyboardAction action);
+        void DoKeyboardAction(string key, bool isDownAction);
         void DoMouseAction(BaseMouseAction action);
 
         /// <summary>

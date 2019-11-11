@@ -14,4 +14,8 @@
     <ProjectReference Include="..\message-based-communication\message-based-communication.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="model\keyboard-action\" />
+  </ItemGroup>
+
 </Project>

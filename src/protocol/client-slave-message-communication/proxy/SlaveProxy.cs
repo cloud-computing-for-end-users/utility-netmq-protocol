@@ -1,5 +1,4 @@
 ﻿using client_slave_message_communication.custom_requests;
-using client_slave_message_communication.model.keyboard_action;
 using client_slave_message_communication.model.mouse_action;
 using custom_message_based_implementation.model;
 using message_based_communication.connection;
@@ -36,13 +35,6 @@ namespace client_slave_message_communication.proxy
             SetStandardParameters(request);
 
             SendMessage(WrapCallBack<Port>(callBack), request);
-        }
-        public void DoKeyboardAction(Action callBack, BaseKeyboardAction action)
-        {
-            var request = new DoKeyboardAction() { arg1KeyboardAction = action };
-            SetStandardParameters(request);
-
-            SendMessage(WrapNoParamAction(callBack), request);
         }
 
         /// <summary>
