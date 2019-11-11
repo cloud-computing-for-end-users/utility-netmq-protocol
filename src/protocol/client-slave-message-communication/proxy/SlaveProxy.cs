@@ -76,6 +76,16 @@ namespace client_slave_message_communication.proxy
             SendMessage(WrapNoParamAction(callBack), request);
         }
 
+        public void DoKeyboardAction(Action callback, String key, bool isKeyDownAction)
+        {
+            var request = new DoKeyboardAction();
+            request.IsKeyDownAction = isKeyDownAction;
+            request.Key = key;
+
+            SetStandardParameters(request);
+
+            SendMessage(WrapNoParamAction(callback), request);
+        }
 
         private ModuleType moduleType = new ModuleType() { TypeID = custom_message_based_implementation.consts.ModuleTypeConst.MODULE_TYPE_SLAVE };
         protected override void SetStandardParameters(BaseRequest baseRequest)
