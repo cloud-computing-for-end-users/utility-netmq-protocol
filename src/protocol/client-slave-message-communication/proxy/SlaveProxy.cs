@@ -6,6 +6,7 @@ using message_based_communication.model;
 using message_based_communication.module;
 using message_based_communication.proxy;
 using System;
+using client_slave_message_communication.interfaces;
 
 namespace client_slave_message_communication.proxy
 {

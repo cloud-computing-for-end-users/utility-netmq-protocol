@@ -16,7 +16,8 @@
             ScrollDown, // todo remove, merged to Scroll
             ScrollUp, // todo remove, merged to Scroll
             Scroll,
-            ClickMouseWheel
+            ClickMouseWheel,
+            MouseMove
         }
 
         /// <summary>

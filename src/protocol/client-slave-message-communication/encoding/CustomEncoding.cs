@@ -30,6 +30,10 @@ namespace client_slave_message_communication.encoding
                     {
                         return TryDecodeJson<DoMouseAction<RightMouseUpAction>>(jsonString);
                     }
+                    else if (BaseMouseAction.MouseAction.MouseMove.ToString().Equals(doMouseAction.arg1MouseAction.Action))
+                    {
+                        return TryDecodeJson<DoMouseAction<MouseMoveAction>>(jsonString);
+                    }
                     else
                     {
                         throw new NotImplementedException();
